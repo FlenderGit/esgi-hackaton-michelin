@@ -5,14 +5,6 @@ interface ModeSelectorProps {
   onSelect: (mode: "quick" | "full") => void;
 }
 
-const PROFILES = [
-  { emoji: "☕", name: "Pédale Douce" },
-  { emoji: "💪", name: "Grosse Pédale" },
-  { emoji: "📊", name: "Tryharder" },
-  { emoji: "🚨", name: "Taffeur Psychorigide" },
-  { emoji: "🥐", name: "Pédaleur Gourmand" },
-];
-
 export default function ModeSelector({ onSelect }: ModeSelectorProps) {
   return (
     <div className="min-h-screen bg-q-bg flex flex-col">
@@ -40,7 +32,7 @@ export default function ModeSelector({ onSelect }: ModeSelectorProps) {
             </h1>
 
             <p className="text-q-text-sub text-base sm:text-lg leading-relaxed max-w-sm mx-auto">
-              Découvre ton profil parmi 5 archétypes du cycliste français.
+              Découvre ton profil parmi 5 archétypes !
             </p>
           </div>
 
