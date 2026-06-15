@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import type { Profile, AnswerKey } from '../data'
 import MichelinLogo from './MichelinLogo'
+import ThemeToggle from './ThemeToggle'
 
 interface ResultCardProps {
   profile: Profile
@@ -51,16 +52,19 @@ export default function ResultCard({ profile, answers, onRestart }: ResultCardPr
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex flex-col">
-      <header className="px-6 py-5 border-b border-[#161616]">
+    <div className="min-h-screen bg-q-bg flex flex-col">
+      <header className="px-6 py-5 border-b border-q-border-sub">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <MichelinLogo />
-          <button
-            onClick={onRestart}
-            className="text-[#555] text-sm hover:text-white transition-colors"
-          >
-            Recommencer
-          </button>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <button
+              onClick={onRestart}
+              className="text-q-text-muted text-sm hover:text-q-text transition-colors"
+            >
+              Recommencer
+            </button>
+          </div>
         </div>
       </header>
 
@@ -69,7 +73,7 @@ export default function ResultCard({ profile, answers, onRestart }: ResultCardPr
           className="w-full max-w-2xl mx-auto space-y-6"
           style={{ animation: 'fadeSlideIn 0.45s ease-out both' }}
         >
-          <p className="text-center text-[#555] text-xs uppercase tracking-widest">
+          <p className="text-center text-q-text-muted text-xs uppercase tracking-widest">
             Ton profil est…
           </p>
 
@@ -99,7 +103,7 @@ export default function ResultCard({ profile, answers, onRestart }: ResultCardPr
               </h1>
             </div>
 
-            <p className="text-[#888] text-base sm:text-lg leading-relaxed max-w-md mx-auto">
+            <p className="text-white/60 text-base sm:text-lg leading-relaxed max-w-md mx-auto">
               {profile.description}
             </p>
 
@@ -109,29 +113,29 @@ export default function ResultCard({ profile, answers, onRestart }: ResultCardPr
             />
           </div>
 
-          <div className="bg-[#111] border border-[#1E1E1E] rounded-2xl p-6 space-y-4">
-            <h3 className="text-[#444] text-xs uppercase tracking-widest">
+          <div className="bg-q-card border border-q-border rounded-2xl p-6 space-y-4">
+            <h3 className="text-q-text-dim text-xs uppercase tracking-widest">
               Répartition de tes réponses
             </h3>
             <div className="space-y-3">
-              {(Object.keys(counts) as AnswerKey[]).map((key) => {
+              {(Object.keys(counts) as AnswerKey[]).map((key, i) => {
                 const count = counts[key]
                 const pct = total > 0 ? (count / total) * 100 : 0
                 return (
                   <div key={key} className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span className="text-[#666]">{ANSWER_LABELS[key]}</span>
-                      <span className="text-[#444] tabular-nums">
+                      <span className="text-q-text-muted">{ANSWER_LABELS[key]}</span>
+                      <span className="text-q-text-dim tabular-nums">
                         {count} / {total}
                       </span>
                     </div>
-                    <div className="h-1 bg-[#1A1A1A] rounded-full overflow-hidden">
+                    <div className="h-1 bg-q-border-track rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-700 ease-out"
                         style={{
                           width: animated ? `${pct}%` : '0%',
                           backgroundColor: ANSWER_COLORS[key],
-                          transitionDelay: `${(Object.keys(counts).indexOf(key)) * 100}ms`,
+                          transitionDelay: `${i * 100}ms`,
                         }}
                       />
                     </div>
@@ -144,13 +148,13 @@ export default function ResultCard({ profile, answers, onRestart }: ResultCardPr
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={onRestart}
-              className="flex-1 py-4 rounded-xl bg-[#FFD100] text-black font-bold text-base hover:bg-[#FFE033] active:scale-95 transition-all duration-150 cursor-pointer"
+              className="flex-1 py-4 rounded-xl bg-q-yellow text-black font-bold text-base hover:bg-[#FFE033] active:scale-95 transition-all duration-150 cursor-pointer"
             >
               Rejouer
             </button>
             <button
               onClick={handleShare}
-              className="flex-1 py-4 rounded-xl border border-[#222] bg-[#111] text-[#999] font-medium text-base hover:border-[#383838] hover:text-white hover:bg-[#161616] active:scale-95 transition-all duration-150 cursor-pointer"
+              className="flex-1 py-4 rounded-xl border border-q-border bg-q-card text-q-text-muted font-medium text-base hover:border-q-yellow/30 hover:text-q-text hover:bg-q-card-hover active:scale-95 transition-all duration-150 cursor-pointer"
             >
               Partager mon profil
             </button>

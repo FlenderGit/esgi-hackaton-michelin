@@ -14,7 +14,7 @@ export default function QuestionCard({ question, selectedAnswer, onAnswer }: Que
       className="space-y-8"
       style={{ animation: 'fadeSlideIn 0.35s ease-out both' }}
     >
-      <h2 className="text-2xl sm:text-3xl font-bold text-white leading-snug">
+      <h2 className="text-2xl sm:text-3xl font-bold text-q-text leading-snug">
         {question.text}
       </h2>
 
@@ -32,18 +32,18 @@ export default function QuestionCard({ question, selectedAnswer, onAnswer }: Que
               className={[
                 'group flex items-start gap-4 p-5 rounded-xl border text-left transition-all duration-200 cursor-pointer',
                 isSelected
-                  ? 'border-[#FFD100] bg-[#FFD100]/8 scale-[0.99]'
+                  ? 'border-q-yellow bg-q-yellow/8 scale-[0.99]'
                   : isDimmed
-                    ? 'border-[#1A1A1A] bg-[#0E0E0E] opacity-35 cursor-not-allowed'
-                    : 'border-[#222] bg-[#111] hover:border-[#383838] hover:bg-[#161616] active:scale-[0.98]',
+                    ? 'border-q-border-sub bg-q-bg opacity-35 cursor-not-allowed'
+                    : 'border-q-border bg-q-card hover:border-q-yellow/30 hover:bg-q-card-hover active:scale-[0.98]',
               ].join(' ')}
             >
               <span
                 className={[
                   'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200',
                   isSelected
-                    ? 'bg-[#FFD100] text-black'
-                    : 'bg-[#1E1E1E] text-[#666] group-hover:bg-[#2A2A2A] group-hover:text-[#AAA]',
+                    ? 'bg-q-yellow text-black'
+                    : 'bg-q-border text-q-text-muted group-hover:bg-q-border-track group-hover:text-q-text-hover',
                 ].join(' ')}
               >
                 {isSelected ? '✓' : LABELS[answer.key]}
@@ -52,7 +52,7 @@ export default function QuestionCard({ question, selectedAnswer, onAnswer }: Que
               <span
                 className={[
                   'text-sm sm:text-base leading-relaxed transition-colors duration-200',
-                  isSelected ? 'text-white' : 'text-[#999] group-hover:text-[#CCC]',
+                  isSelected ? 'text-q-text' : 'text-q-text-sub group-hover:text-q-text-hover',
                 ].join(' ')}
               >
                 {answer.text}

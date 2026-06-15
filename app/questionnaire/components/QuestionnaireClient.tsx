@@ -13,6 +13,7 @@ import QuestionCard from './QuestionCard'
 import ResultCard from './ResultCard'
 import ProgressBar from './ProgressBar'
 import MichelinLogo from './MichelinLogo'
+import ThemeToggle from './ThemeToggle'
 
 type Step = 'intro' | 'quiz' | 'result'
 type Mode = 'quick' | 'full'
@@ -89,26 +90,25 @@ export default function QuestionnaireClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex flex-col">
-      <header className="px-6 py-5 border-b border-[#161616]">
+    <div className="min-h-screen bg-q-bg flex flex-col">
+      <header className="px-6 py-5 border-b border-q-border-sub">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <MichelinLogo />
-          <button
-            onClick={handleRestart}
-            className="text-[#444] text-sm hover:text-white transition-colors"
-          >
-            Quitter
-          </button>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <button
+              onClick={handleRestart}
+              className="text-q-text-muted text-sm hover:text-q-text transition-colors"
+            >
+              Quitter
+            </button>
+          </div>
         </div>
       </header>
 
       <div className="px-6 pt-6 pb-2">
         <div className="max-w-3xl mx-auto">
-          <ProgressBar
-            current={currentIndex + 1}
-            total={totalQuestions}
-            mode={mode!}
-          />
+          <ProgressBar current={currentIndex + 1} total={totalQuestions} mode={mode!} />
         </div>
       </div>
 
@@ -125,9 +125,9 @@ export default function QuestionnaireClient() {
             <div className="mt-8" style={{ animation: 'fadeSlideIn 0.3s ease-out both' }}>
               <button
                 onClick={handleBack}
-                className="flex items-center gap-2 text-[#444] text-sm hover:text-[#AAA] transition-colors"
+                className="flex items-center gap-2 text-q-text-muted text-sm hover:text-q-text-sub transition-colors"
               >
-                <span className="translate-x-0 hover:-translate-x-0.5 transition-transform">←</span>
+                <span>←</span>
                 Question précédente
               </button>
             </div>
