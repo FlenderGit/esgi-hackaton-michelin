@@ -25,6 +25,7 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
   deploy:
