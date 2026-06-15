@@ -41,21 +41,18 @@ jobs:
           context: .
           push: true
           target: production
-          tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.VERSION }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Release ${{ steps.get_version.outputs.VERSION }}
+          name: Release ${{ github.ref_name }}
           body: |
-            🐳 Image Docker : `ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.VERSION }}`
+            🐳 Image Docker principale : `ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.ref_name }}` (attention aux majuscules dans l'URL de l'image, écris-les en minuscules pour faire un docker pull).
 
-            Déployée automatiquement depuis le tag `${{ steps.get_version.outputs.VERSION }}`.
+            Déployée automatiquement depuis le tag `${{ github.ref_name }}`.
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
