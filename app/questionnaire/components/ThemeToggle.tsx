@@ -1,18 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, startTransition } from 'react'
 
 export default function ThemeToggle() {
   const [isLight, setIsLight] = useState(false)
 
   useEffect(() => {
-    const saved = localStorage.getItem('q-theme')
-    if (saved === 'light') {
-      setIsLight(true)
+    const stored = localStorage.getItem('q-theme') === 'light'
+    if (stored) {
       document.documentElement.setAttribute('data-theme', 'light')
     } else {
       document.documentElement.removeAttribute('data-theme')
     }
+    startTransition(() => setIsLight(stored))
   }, [])
 
   function toggle() {
