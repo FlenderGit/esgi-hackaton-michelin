@@ -2,9 +2,9 @@
 
 <a id="readme-top"></a>
 [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
+[![Version][version-url]][version-url]
+[![CI Status][ci-url]][ci-url]
 [![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
 [![project_license][license-shield]][license-url]
 
 <br />
@@ -135,14 +135,12 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-[contributors-shield]: https://img.shields.io/github/contributors/FlenderGit/esgi-hackaton-michelin.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/FlenderGit/esgi-hackaton-michelin.svg
+[version-url]: https://img.shields.io/github/v/release/FlenderGit/esgi-hackaton-michelin
+[ci-url]: https://github.com/FlenderGit/esgi-hackaton-michelin/actions/workflows/deploy.yml/badge.svg
 [contributors-url]: https://github.com/FlenderGit/esgi-hackaton-michelin/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/FlenderGit/esgi-hackaton-michelin.svg?style=for-the-badge
-[forks-url]: https://github.com/FlenderGit/esgi-hackaton-michelin/network/members
-[stars-shield]: https://img.shields.io/github/stars/FlenderGit/esgi-hackaton-michelin.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/FlenderGit/esgi-hackaton-michelin.svg
 [stars-url]: https://github.com/FlenderGit/esgi-hackaton-michelin/stargazers
-[issues-shield]: https://img.shields.io/github/issues/FlenderGit/esgi-hackaton-michelin.svg?style=for-the-badge
-[issues-url]: https://github.com/FlenderGit/esgi-hackaton-michelin/issues
-[license-shield]: https://img.shields.io/github/license/FlenderGit/esgi-hackaton-michelin.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/FlenderGit/esgi-hackaton-michelin.svg
 [license-url]: https://github.com/FlenderGit/esgi-hackaton-michelin/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.jpg
