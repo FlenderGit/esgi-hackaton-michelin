@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import QuestionnaireClient from './components/QuestionnaireClient'
+import QuestionnaireClient from '@/components/questionnaire/QuestionnaireClient'
 
 export const metadata: Metadata = {
   title: 'Quel cycliste es-tu ? — Michelin',

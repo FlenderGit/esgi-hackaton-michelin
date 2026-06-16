@@ -10,8 +10,10 @@ const notoSans = Noto_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Quel cycliste es-tu ? — Michelin",
-  description: "Découvre ton profil cycliste parmi 5 archétypes Michelin.",
+  title: "Michelin Velo — Profil & Configurateur",
+  description:
+    "Découvrez votre profil cycliste et configurez les pneus adaptés à votre pratique.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
