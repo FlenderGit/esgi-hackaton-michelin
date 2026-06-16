@@ -1,50 +1,54 @@
 @import "tailwindcss";
 
 /* ── Tailwind v4 theme tokens — dark (default) ──────────────── */
+/*
+   Sources : https://designsystem.michelin.com/colors
+   Midnight Blue  #000C34  · Dark Blue  #00205B  · Primary Blue  #27509B
+   Primary Yellow #FCE500  · Police : Noto Sans (officielle Michelin)
+*/
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-noto-sans), "Noto Sans", Arial, sans-serif;
 
-  /* Surfaces */
-  --color-q-bg:           #0b142e;
-  --color-q-card:         #111e3f;
-  --color-q-card-hover:   #162448;
+  /* Surfaces — bleu nuit / bleu foncé Michelin */
+  --color-q-bg:           #000C34;
+  --color-q-card:         #00205B;
+  --color-q-card-hover:   #002D7A;
 
-  /* Borders */
-  --color-q-border:       #1e3060;
-  --color-q-border-sub:   #162248;
-  --color-q-border-track: #152040;
+  /* Borders — dérivés du bleu primaire #27509B */
+  --color-q-border:       #27509B;
+  --color-q-border-sub:   #1A3A7A;
+  --color-q-border-track: #122860;
 
   /* Text */
-  --color-q-text:         #ffffff;
-  --color-q-text-sub:     #7090b8;
-  --color-q-text-muted:   #4a6088;
-  --color-q-text-dim:     #283a58;
-  --color-q-text-hover:   #d0dff0;
+  --color-q-text:         #FFFFFF;
+  --color-q-text-sub:     #87A4D0;
+  --color-q-text-muted:   #6182BB;
+  --color-q-text-dim:     #3A61A6;
+  --color-q-text-hover:   #D4E7FA;
 
-  /* Brand */
-  --color-q-yellow:       #ffd100;
+  /* Brand — jaune Michelin officiel */
+  --color-q-yellow:       #FCE500;
 }
 
-/* ── Light theme — overrides the same --color-q-* vars ─────── */
+/* ── Light theme — palette claire Michelin ──────────────────── */
 
 [data-theme="light"] {
-  --color-q-bg:           #edf1ff;
-  --color-q-card:         #ffffff;
-  --color-q-card-hover:   #e4eaff;
+  --color-q-bg:           #F2F2F2;
+  --color-q-card:         #FFFFFF;
+  --color-q-card-hover:   #E5E5E5;
 
-  --color-q-border:       #bfcfee;
-  --color-q-border-sub:   #d0dcf5;
-  --color-q-border-track: #c5d4f0;
+  --color-q-border:       #AEC5E5;
+  --color-q-border-sub:   #C1D6EF;
+  --color-q-border-track: #D4E7FA;
 
-  --color-q-text:         #080d1e;
-  --color-q-text-sub:     #3a5080;
-  --color-q-text-muted:   #6080a8;
-  --color-q-text-dim:     #a0b4d0;
-  --color-q-text-hover:   #0a0f1e;
+  --color-q-text:         #000000;
+  --color-q-text-sub:     #27509B;
+  --color-q-text-muted:   #666666;
+  --color-q-text-dim:     #999999;
+  --color-q-text-hover:   #0D0D0D;
 
-  --color-q-yellow:       #ffd100;
+  --color-q-yellow:       #FCE500;
 }
 
 /* ── Base ───────────────────────────────────────────────────── */
@@ -52,7 +56,7 @@
 body {
   background-color: var(--color-q-bg);
   color: var(--color-q-text);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
