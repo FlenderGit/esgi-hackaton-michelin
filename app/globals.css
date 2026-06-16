@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ── Tailwind v4 theme tokens — dark (default) ──────────────── */
+/*
+   Sources : https://designsystem.michelin.com/colors
+   Midnight Blue  #000C34  · Dark Blue  #00205B  · Primary Blue  #27509B
+   Primary Yellow #FCE500  · Police : Noto Sans (officielle Michelin)
+*/
+
+@theme {
+  --font-sans: var(--font-noto-sans), "Noto Sans", Arial, sans-serif;
+
+  /* Surfaces — bleu nuit / bleu foncé Michelin */
+  --color-q-bg:           #000C34;
+  --color-q-card:         #00205B;
+  --color-q-card-hover:   #002D7A;
+
+  /* Borders — dérivés du bleu primaire #27509B */
+  --color-q-border:       #27509B;
+  --color-q-border-sub:   #1A3A7A;
+  --color-q-border-track: #122860;
+
+  /* Text */
+  --color-q-text:         #FFFFFF;
+  --color-q-text-sub:     #87A4D0;
+  --color-q-text-muted:   #6182BB;
+  --color-q-text-dim:     #3A61A6;
+  --color-q-text-hover:   #D4E7FA;
+
+  /* Brand — jaune Michelin officiel */
+  --color-q-yellow:       #FCE500;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ── Light theme — palette claire Michelin ──────────────────── */
+
+[data-theme="light"] {
+  --color-q-bg:           #F2F2F2;
+  --color-q-card:         #FFFFFF;
+  --color-q-card-hover:   #E5E5E5;
+
+  --color-q-border:       #AEC5E5;
+  --color-q-border-sub:   #C1D6EF;
+  --color-q-border-track: #D4E7FA;
+
+  --color-q-text:         #000000;
+  --color-q-text-sub:     #27509B;
+  --color-q-text-muted:   #666666;
+  --color-q-text-dim:     #999999;
+  --color-q-text-hover:   #0D0D0D;
+
+  --color-q-yellow:       #FCE500;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ── Base ───────────────────────────────────────────────────── */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-q-bg);
+  color: var(--color-q-text);
+  font-family: var(--font-sans);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ── Animations ─────────────────────────────────────────────── */
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
 }
