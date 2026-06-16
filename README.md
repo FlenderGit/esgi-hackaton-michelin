@@ -34,9 +34,11 @@
 
 [![Product Screen Shot][product-screenshot]](https://example.com)
 
-This project was developed during the **ESGI Hackathon** with the goal of **dynamizing and relaunching Michelin Velo** — a commercial platform designed to enhance bike sales and re-engage customers with the Michelin Velo brand.
+**Michelin Vélo** is a premium e-commerce platform developed during the **ESGI Hackathon**, designed to relaunch and energize Michelin's cycling division. Built for discerning cyclists, the platform blends heritage, expertise, and smart tooling to reconnect customers with the Michelin Vélo brand.
 
-Bacon ipsum dolor amet drumstick short ribs kevin shankle, flank cow spare ribs frankfurter tongue jerky strip steak. Cow picanha capicola drumstick meatloaf sausage beef ribs ball tip pork chop tenderloin pig. Prosciutto mortadella venison corned beef, pancetta chicken rump leberkas short ribs jowl meatball frankfurter landjaeger. Brisket landjaeger alcatra, prosciutto ball tip frankfurter filet mignon ground round tail chislic ham hock ribeye spare ribs turducken.
+- **Heritage & Expertise** — Discover Michelin's storied history and technical mastery in cycling, from pioneering rubber innovations to modern tire technology.
+- **Smart Tire Finder** — Find the perfect tire for your needs, whether road racing, gravel, urban commuting, or mountain trails.
+- **Interactive Reseller Map** — Locate nearby authorized Michelin Vélo dealers with an interactive map.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -46,9 +48,8 @@ The platform serves as a commercial website to showcase and sell Michelin Velo b
 
 Key features:
 - **Product Catalog** — Browse and filter Michelin Velo bike models
-- **Real-time Updates** — Live inventory and availability powered by Firebase
 - **Responsive Design** — Optimized for desktop and mobile devices
-- **Edge Performance** — Deployed on Cloudflare Pages for global low-latency access
+- **Edge Performance** — Deployed on Cloudflare Pages for global low-latency access and Docker image availible
 
 _For more examples and detailed API documentation, please refer to the [Documentation](https://example.com)_
 
