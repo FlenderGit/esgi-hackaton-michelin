@@ -15,9 +15,7 @@ export default function ProgressBar({ current, total, mode }: ProgressBarProps) 
             {mode === 'quick' ? 'Rapide' : 'Complet'}
           </span>
           <span className="text-q-text-dim text-xs">·</span>
-          <span className="text-q-text-muted text-xs">
-            {current} / {total}
-          </span>
+          <span className="text-q-text-muted text-xs">{current} / {total}</span>
         </div>
         <span className="text-q-text-muted text-xs tabular-nums">{percentage}%</span>
       </div>
