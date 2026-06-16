@@ -40,11 +40,11 @@ export const ALL_QUESTIONS: Question[] = [
       { key: "b", text: "Tu sprintes pour le rattraper et lui faire la leçon" },
       {
         key: "c",
-        text: "Tu actives ta caméra et tu postes la vidéo sur Strava avec #ClosePass",
+        text: "Tu actives ta caméra et tu postes la vidéo sur Internet pour l'afficher",
       },
       {
         key: "d",
-        text: "Tu klaxonnes comme un possédé et tu lui balances tous les gros mots que tu connais",
+        text: "Tu klaxonnes comme un possédé et tu lui l'insulte de ton riche vocabulaire",
       },
     ],
   },
@@ -54,7 +54,7 @@ export const ALL_QUESTIONS: Question[] = [
     answers: [
       {
         key: "a",
-        text: "30-40 km à allure tranquille avec un bon café en terrasse au milieu",
+        text: "30-40 km à allure tranquille avec un bon café en terrasse",
       },
       {
         key: "b",
@@ -66,7 +66,7 @@ export const ALL_QUESTIONS: Question[] = [
       },
       {
         key: "d",
-        text: "Une virée en ville pour « tester mes limites » (aka faire chier les automobilistes)",
+        text: "Une virée en ville pour « tester mes limites » (faire chier les automobilistes)",
       },
     ],
   },
@@ -85,7 +85,7 @@ export const ALL_QUESTIONS: Question[] = [
       },
       {
         key: "d",
-        text: "Tu klaxonnes et tu lui cries « Bordel avance ou dégage ! »",
+        text: "Tu marteles la sonnette : « Bordel avance ou dégage ! »",
       },
     ],
   },
@@ -189,7 +189,7 @@ export const ALL_QUESTIONS: Question[] = [
       },
       {
         key: "d",
-        text: "Je sors et je klaxonne les voitures qui m'éclaboussent",
+        text: "Je sors et je sonne les voitures qui m'éclaboussent",
       },
     ],
   },
@@ -234,7 +234,7 @@ export const ALL_QUESTIONS: Question[] = [
     answers: [
       {
         key: "a",
-        text: "Je suis content, j'ai passé un bon moment, je vais me poser avec une bière",
+        text: "80 km? sur la semaine ?",
       },
       {
         key: "b",
