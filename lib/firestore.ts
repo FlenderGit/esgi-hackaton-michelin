@@ -8,9 +8,10 @@ import {
 } from "firebase/firestore";
 import { err, ok, Result, ResultAsync } from "neverthrow";
 import { z } from "zod";
+import { env } from "./env";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAfCfz1FPKnltbRmrwEctz8nZYeWk1I3OA",
+  apiKey: env.FIRESTORE_API_KEY,
   authDomain: "esgi-hackaton-michelin.firebaseapp.com",
   projectId: "esgi-hackaton-michelin",
   storageBucket: "esgi-hackaton-michelin.firebasestorage.app",
