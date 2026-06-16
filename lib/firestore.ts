@@ -70,3 +70,44 @@ export function get_suppliers(): ResultAsync<Array<Supplier>, string> {
     .map(map_docs_to_raw)
     .andThen((data) => zod_parser(z.array(supplier_schema), data));
 }
+
+// Tires
+const bead_type_enum = z.enum(["Souple", "Rigide"]);
+const mount_type_enum = z.enum([
+  "Tubetype",
+  "Tubeless Ready",
+  "Tubetype / Tubeless Ready",
+]);
+const category_enum = z.enum(["Route", "VTT", "Ville"]);
+
+const tire_schema = z.object({
+  Name: z.string(),
+  Category: category_enum,
+  Diameter: z.string(),
+  Width_mm: z.number().nullable(),
+  Width_in: z.number().nullable(),
+  ETRTO: z.string().regex(/^\d+-\d+$/),
+  TPI: z.number().int().positive(),
+  Weight_g: z.number().int().positive(),
+  Min_pressure_bar: z.number().positive(),
+  Max_pressure_bar: z.number().positive(),
+  Bead_type: bead_type_enum,
+  Mount_type: mount_type_enum,
+  Compound: z.string(),
+  Casing: z.string(),
+  Usage: z.string(),
+  E_Bike_ready: z.enum(["Oui", "Non"]),
+  Technology: z.string(),
+});
+
+export type Tire = z.infer<typeof tire_schema>;
+
+const TIRES_COLLECTION_NAME = "tires";
+export function get_tires(): ResultAsync<Array<Tire>, string> {
+  return ResultAsync.fromPromise(
+    getDocs(collection(db, TIRES_COLLECTION_NAME)),
+    (error) => `Firestore error: ${String(error)}`,
+  )
+    .map(map_docs_to_raw)
+    .andThen((data) => zod_parser(z.array(tire_schema), data));
+}
