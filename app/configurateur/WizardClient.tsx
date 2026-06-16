@@ -42,7 +42,7 @@ export default function WizardClient() {
   }
 
   function goNext() {
-    if (step === 'crossroads') return // handled by crossroads buttons
+    if (step === 'crossroads') return
 
     const mainIdx = STEP_ORDER.indexOf(step)
     if (mainIdx >= 0 && mainIdx < STEP_ORDER.length - 1) {
@@ -65,11 +65,7 @@ export default function WizardClient() {
 
   function goBack() {
     if (step === 'results') {
-      if (advancedPath) {
-        setStep('adv-axle')
-      } else {
-        setStep('crossroads')
-      }
+      setStep(advancedPath ? 'adv-axle' : 'crossroads')
       return
     }
 
@@ -82,8 +78,7 @@ export default function WizardClient() {
     const mainIdx = STEP_ORDER.indexOf(step)
     if (mainIdx > 0) {
       setStep(STEP_ORDER[mainIdx - 1])
-    } else if (mainIdx === 0) {
-      // First step — go home
+    } else {
       window.location.href = '/'
     }
   }
@@ -107,14 +102,18 @@ export default function WizardClient() {
   const ok = canProceed(step, answers)
   const isResults = step === 'results'
   const isCrossroads = step === 'crossroads'
+  const showFooter = !isCrossroads
 
   return (
-    <div className="min-h-screen bg-q-bg text-q-text flex flex-col">
-      <WizardHeader step={step} onExit={handleReset} />
+    <div
+      data-theme="light"
+      className="min-h-screen flex flex-col"
+      style={{ background: '#F8F9FB', color: '#0D1526' }}
+    >
+      <WizardHeader step={step} onBack={goBack} onExit={handleReset} />
 
-      {/* Content */}
       <main className="flex-1 flex flex-col">
-        <div className="max-w-3xl mx-auto w-full px-6 py-10 flex-1">
+        <div className="max-w-3xl mx-auto w-full px-5 sm:px-8 py-8 sm:py-12 flex-1">
           {step === 'profile' && (
             <Step1Profile
               answers={answers}
@@ -150,24 +149,15 @@ export default function WizardClient() {
           )}
 
           {step === 'adv-mount' && (
-            <StepAdvMount
-              answers={answers}
-              onChange={(mounting) => update({ mounting })}
-            />
+            <StepAdvMount answers={answers} onChange={(mounting) => update({ mounting })} />
           )}
 
           {step === 'adv-budget' && (
-            <StepAdvBudget
-              answers={answers}
-              onChange={(budget: BudgetRange) => update({ budget })}
-            />
+            <StepAdvBudget answers={answers} onChange={(budget: BudgetRange) => update({ budget })} />
           )}
 
           {step === 'adv-axle' && (
-            <StepAdvAxle
-              answers={answers}
-              onChange={(axle) => update({ axle })}
-            />
+            <StepAdvAxle answers={answers} onChange={(axle) => update({ axle })} />
           )}
 
           {step === 'results' && (
@@ -175,49 +165,67 @@ export default function WizardClient() {
           )}
         </div>
 
-        {/* Navigation footer */}
-        {!isCrossroads && !isResults && (
-          <div className="sticky bottom-0 bg-q-bg/95 backdrop-blur border-t border-q-border-sub">
-            <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-              <button
-                onClick={goBack}
-                className="flex items-center gap-2 text-sm text-q-text-muted hover:text-q-text transition-colors cursor-pointer"
-              >
-                ← Retour
-              </button>
+        {/* Footer */}
+        {showFooter && (
+          <div
+            className="sticky bottom-0 backdrop-blur-sm"
+            style={{
+              background: 'rgba(248,249,251,0.95)',
+              borderTop: '1px solid #E2E8F0',
+            }}
+          >
+            <div className="max-w-3xl mx-auto px-5 sm:px-8 py-4 flex items-center gap-4">
+              {/* Back button */}
+              {!isResults && (
+                <button
+                  onClick={goBack}
+                  className="flex items-center gap-1.5 text-sm font-medium transition-colors cursor-pointer shrink-0"
+                  style={{ color: '#6B7280' }}
+                >
+                  ← Retour
+                </button>
+              )}
+              {isResults && (
+                <button
+                  onClick={goBack}
+                  className="flex items-center gap-1.5 text-sm font-medium transition-colors cursor-pointer shrink-0"
+                  style={{ color: '#6B7280' }}
+                >
+                  ← Modifier mes critères
+                </button>
+              )}
 
-              <button
-                onClick={goNext}
-                disabled={!ok}
-                className={[
-                  'flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all duration-200',
-                  ok
-                    ? 'bg-q-yellow text-black hover:bg-[#FFE033] active:scale-[0.98] cursor-pointer'
-                    : 'bg-q-border-track text-q-text-dim cursor-not-allowed opacity-60',
-                ].join(' ')}
-              >
-                Continuer →
-              </button>
-            </div>
-          </div>
-        )}
+              <div className="flex-1" />
 
-        {/* Results footer */}
-        {isResults && (
-          <div className="sticky bottom-0 bg-q-bg/95 backdrop-blur border-t border-q-border-sub">
-            <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-              <button
-                onClick={goBack}
-                className="flex items-center gap-2 text-sm text-q-text-muted hover:text-q-text transition-colors cursor-pointer"
-              >
-                ← Modifier mes critères
-              </button>
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-q-border text-sm font-medium text-q-text-muted hover:text-q-text hover:border-q-border-sub transition cursor-pointer"
-              >
-                Recommencer
-              </button>
+              {/* Continue / Restart button */}
+              {!isResults && (
+                <button
+                  onClick={goNext}
+                  disabled={!ok}
+                  className="flex items-center justify-center gap-2 px-7 py-3 rounded-full font-bold text-sm transition-all duration-200 sm:w-auto w-auto"
+                  style={{
+                    background: ok ? '#FCE500' : '#E2E8F0',
+                    color: ok ? '#0D1526' : '#9CA3AF',
+                    cursor: ok ? 'pointer' : 'not-allowed',
+                    minWidth: '140px',
+                  }}
+                >
+                  Continuer →
+                </button>
+              )}
+              {isResults && (
+                <button
+                  onClick={handleReset}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition cursor-pointer"
+                  style={{
+                    border: '1.5px solid #E2E8F0',
+                    color: '#374151',
+                    background: '#FFFFFF',
+                  }}
+                >
+                  Recommencer
+                </button>
+              )}
             </div>
           </div>
         )}

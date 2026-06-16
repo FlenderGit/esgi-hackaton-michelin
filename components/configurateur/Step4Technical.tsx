@@ -1,13 +1,33 @@
 import type { WizardAnswers, WizardBikeType } from '@/app/configurateur/data'
 import { WIDTH_OPTIONS } from '@/app/configurateur/data'
 
-const BIKE_TYPES: { id: WizardBikeType; label: string; emoji: string }[] = [
-  { id: 'vtt', label: 'VTT', emoji: '⛰️' },
-  { id: 'route', label: 'Route', emoji: '🛣️' },
-  { id: 'gravel', label: 'Gravel', emoji: '🪨' },
-  { id: 'ville', label: 'Ville', emoji: '🏙️' },
-  { id: 'electrique', label: 'Électrique', emoji: '⚡' },
+const BLUE = '#27509B'
+
+const BIKE_TYPES: { id: WizardBikeType; label: string }[] = [
+  { id: 'vtt', label: 'VTT' },
+  { id: 'route', label: 'Route' },
+  { id: 'gravel', label: 'Gravel' },
+  { id: 'ville', label: 'Ville' },
+  { id: 'electrique', label: 'Électrique' },
 ]
+
+function Chip({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={selected}
+      className="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-150 cursor-pointer"
+      style={{
+        background: selected ? BLUE : '#FFFFFF',
+        color: selected ? '#ffffff' : '#374151',
+        border: selected ? `2px solid ${BLUE}` : '1.5px solid #E2E8F0',
+        boxShadow: selected ? 'none' : '0 1px 3px rgba(0,0,0,0.04)',
+      }}
+    >
+      {label}
+    </button>
+  )
+}
 
 interface Step4TechnicalProps {
   answers: WizardAnswers
@@ -19,87 +39,69 @@ export default function Step4Technical({ answers, onBikeTypeChange, onWidthChang
   const widthOpts = answers.bikeType ? WIDTH_OPTIONS[answers.bikeType] : []
 
   return (
-    <div className="space-y-8" style={{ animation: 'fadeSlideIn 0.35s ease-out both' }}>
-      <div className="space-y-2">
-        <h1 className="text-3xl sm:text-4xl font-black text-q-text tracking-tight">Quelques infos techniques</h1>
-        <p className="text-q-text-sub">Pour affiner nos recommandations à ton vélo.</p>
+    <div className="space-y-10" style={{ animation: 'fadeSlideIn 0.3s ease-out both' }}>
+      <div className="text-center space-y-2">
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight" style={{ color: '#0D1526' }}>
+          Quelques infos techniques
+        </h1>
+        <p className="text-base text-gray-500">Pour affiner nos recommandations à ton vélo.</p>
       </div>
 
-      <div className="space-y-6">
-        <div className="space-y-3">
-          <h2 className="text-sm font-semibold text-q-text-muted uppercase tracking-wider">Type de vélo</h2>
-          <div className="flex flex-wrap gap-2">
-            {BIKE_TYPES.map((bt) => {
-              const isSelected = answers.bikeType === bt.id
-              return (
-                <button
-                  key={bt.id}
-                  onClick={() => {
-                    onBikeTypeChange(bt.id)
-                    onWidthChange('') // reset width when bike type changes
-                  }}
-                  aria-pressed={isSelected}
-                  className={[
-                    'flex items-center gap-2 px-4 py-2.5 rounded-full border-2 text-sm font-medium transition-all duration-200 cursor-pointer',
-                    isSelected
-                      ? 'border-q-yellow bg-q-yellow text-black'
-                      : 'border-q-border bg-q-card text-q-text hover:border-q-border-sub hover:bg-q-card-hover',
-                  ].join(' ')}
-                >
-                  <span>{bt.emoji}</span>
-                  <span>{bt.label}</span>
-                </button>
-              )
-            })}
+      <div className="space-y-8">
+        {/* Bike type */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider">Type de vélo</h2>
+          <div className="flex flex-wrap gap-2.5">
+            {BIKE_TYPES.map((bt) => (
+              <Chip
+                key={bt.id}
+                label={bt.label}
+                selected={answers.bikeType === bt.id}
+                onClick={() => {
+                  onBikeTypeChange(bt.id)
+                  onWidthChange('')
+                }}
+              />
+            ))}
           </div>
         </div>
 
+        {/* Width — appears after bike type selected */}
         {answers.bikeType && (
-          <div className="space-y-3" style={{ animation: 'fadeSlideIn 0.25s ease-out both' }}>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-q-text-muted uppercase tracking-wider">Largeur de pneu</h2>
-              <span className="text-[10px] text-q-text-dim border border-q-border-sub rounded-full px-2 py-0.5">
+          <div className="space-y-4" style={{ animation: 'fadeSlideIn 0.2s ease-out both' }}>
+            <div className="flex items-center gap-3">
+              <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider">Largeur de pneu</h2>
+              <span
+                className="text-xs px-2.5 py-1 rounded-full font-medium cursor-default"
+                style={{ background: '#EEF3FF', color: BLUE }}
+              >
                 ⓘ inscrit sur le flanc du pneu
               </span>
             </div>
-
-            <div className="flex flex-wrap gap-2">
-              {widthOpts.map((opt) => {
-                const isSelected = answers.width === opt.value
-                return (
-                  <button
-                    key={opt.value}
-                    onClick={() => onWidthChange(isSelected ? '' : opt.value)}
-                    aria-pressed={isSelected}
-                    className={[
-                      'px-4 py-2.5 rounded-full border-2 text-sm font-medium transition-all duration-200 cursor-pointer',
-                      isSelected
-                        ? 'border-q-yellow bg-q-yellow text-black'
-                        : 'border-q-border bg-q-card text-q-text hover:border-q-border-sub hover:bg-q-card-hover',
-                    ].join(' ')}
-                  >
-                    {opt.label}
-                  </button>
-                )
-              })}
-              <button
-                onClick={() => onWidthChange('je_ne_sais_pas')}
-                aria-pressed={answers.width === 'je_ne_sais_pas'}
-                className={[
-                  'px-4 py-2.5 rounded-full border-2 text-sm font-medium transition-all duration-200 cursor-pointer',
-                  answers.width === 'je_ne_sais_pas'
-                    ? 'border-q-yellow bg-q-yellow text-black'
-                    : 'border-q-border-sub bg-q-card text-q-text-muted hover:border-q-border hover:bg-q-card-hover',
-                ].join(' ')}
-              >
-                Je ne sais pas
-              </button>
+            <div className="flex flex-wrap gap-2.5">
+              {widthOpts.map((opt) => (
+                <Chip
+                  key={opt.value}
+                  label={opt.label}
+                  selected={answers.width === opt.value}
+                  onClick={() => onWidthChange(answers.width === opt.value ? '' : opt.value)}
+                />
+              ))}
+              <Chip
+                label="Je ne sais pas"
+                selected={answers.width === 'je_ne_sais_pas'}
+                onClick={() => onWidthChange(answers.width === 'je_ne_sais_pas' ? '' : 'je_ne_sais_pas')}
+              />
             </div>
           </div>
         )}
 
-        <div className="p-4 rounded-xl border border-q-border-sub bg-q-card/50 text-sm text-q-text-muted">
-          Tu ne connais pas ces infos ? Pas de souci — on peut te recommander directement à partir de ton profil et ton terrain.
+        {/* Helper note */}
+        <div
+          className="p-4 rounded-xl text-sm text-gray-500 leading-relaxed"
+          style={{ background: '#F8F9FB', border: '1px dashed #E2E8F0' }}
+        >
+          Tu ne connais pas ces infos&nbsp;? Pas de souci — on peut les déduire de ton profil et ton terrain, ou te recommander directement.
         </div>
       </div>
     </div>
