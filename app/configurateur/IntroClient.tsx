@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/landing/Navbar";
 
@@ -24,6 +25,16 @@ const FEATURES = [
 ];
 
 export default function IntroClient() {
+  // Reset de la progression à chaque accès au configurateur (page d'intro)
+  // pour s'assurer qu'on reparte toujours de zéro si on avait déjà fait le parcours.
+  useEffect(() => {
+    try {
+      localStorage.removeItem("michelin-configurateur");
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-q-bg text-q-text">
       <Navbar />
