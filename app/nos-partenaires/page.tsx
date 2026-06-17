@@ -16,7 +16,6 @@ export default function Page() {
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
     null,
   );
-  const [center, setCenter] = useState<[number, number]>([48.8566, 2.3522]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,21 +46,33 @@ export default function Page() {
       )}
 
       <DynamicMap
-        center={center}
         zoom={13}
-        markers={suppliers.map((s) => ({
-          name: s.name,
-          location: [s.position.latitude, s.position.longitude],
-          data: s,
-        }))}
+        markers={
+          selectedSupplier !== null
+            ? [
+                {
+                  name: selectedSupplier.name,
+                  location: [
+                    selectedSupplier.position.latitude,
+                    selectedSupplier.position.longitude,
+                  ],
+                  data: selectedSupplier,
+                },
+              ]
+            : suppliers.map((s) => ({
+                name: s.name,
+                location: [s.position.latitude, s.position.longitude],
+                data: s,
+              }))
+        }
         segments={[
           [48.8566, 2.3522],
           [48.8584, 2.2945],
         ]}
+        bound_type="markers"
         onclick={(data) => {
           console.log(data);
           setSelectedSupplier(data);
-          setCenter([data.position.latitude, data.position.longitude]);
         }}
       />
     </div>
