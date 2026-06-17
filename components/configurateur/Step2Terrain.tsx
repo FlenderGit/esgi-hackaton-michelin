@@ -1,92 +1,165 @@
-import type { WizardAnswers, TerrainType, WeatherType } from '@/app/configurateur/data'
+import type {
+  WizardAnswers,
+  TerrainType,
+  WeatherType,
+} from "@/app/configurateur/data";
 
-const BLUE = '#27509B'
+const TERRAIN_OPTIONS: {
+  id: TerrainType;
+  label: string;
+  emoji: string;
+  color: string;
+}[] = [
+    {
+      id: "sentiers",
+      label: "Sentiers",
+      emoji: "🌲",
+      color: "from-green-700/20 to-emerald-600/10",
+    },
+    {
+      id: "chemins",
+      label: "Chemins",
+      emoji: "🏔️",
+      color: "from-amber-700/20 to-orange-600/10",
+    },
+    {
+      id: "asphalte",
+      label: "Asphalte",
+      emoji: "🛣️",
+      color: "from-slate-600/20 to-gray-500/10",
+    },
+    {
+      id: "boue",
+      label: "Boue",
+      emoji: "💧",
+      color: "from-yellow-800/20 to-amber-700/10",
+    },
+    {
+      id: "mixte",
+      label: "Mixte",
+      emoji: "🔄",
+      color: "from-violet-700/20 to-purple-600/10",
+    },
+  ];
 
-const TERRAIN_OPTIONS: { id: TerrainType; label: string }[] = [
-  { id: 'sentiers', label: 'Sentiers' },
-  { id: 'chemins', label: 'Chemins' },
-  { id: 'asphalte', label: 'Asphalte' },
-  { id: 'boue', label: 'Boue' },
-  { id: 'mixte', label: 'Mixte' },
-]
-
-const WEATHER_OPTIONS: { id: WeatherType; label: string }[] = [
-  { id: 'sec', label: 'Sec' },
-  { id: 'humide', label: 'Humide' },
-  { id: 'boueux', label: 'Boueux' },
-]
+const WEATHER_OPTIONS: { id: WeatherType; label: string; emoji: string }[] = [
+  { id: "sec", label: "Sec", emoji: "☀️" },
+  { id: "humide", label: "Humide", emoji: "🌧️" },
+  { id: "boueux", label: "Boueux", emoji: "🌊" },
+];
 
 interface Step2TerrainProps {
-  answers: WizardAnswers
-  onTerrainChange: (terrain: TerrainType[]) => void
-  onWeatherChange: (weather: WeatherType[]) => void
+  answers: WizardAnswers;
+  onTerrainChange: (terrain: TerrainType[]) => void;
+  onWeatherChange: (weather: WeatherType[]) => void;
 }
 
 function toggle<T>(arr: T[], item: T): T[] {
-  return arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item]
+  return arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item];
 }
 
-function Chip({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
+export default function Step2Terrain({
+  answers,
+  onTerrainChange,
+  onWeatherChange,
+}: Step2TerrainProps) {
   return (
-    <button
-      onClick={onClick}
-      aria-pressed={selected}
-      className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-150 cursor-pointer"
-      style={{
-        background: selected ? BLUE : '#FFFFFF',
-        color: selected ? '#ffffff' : '#374151',
-        border: selected ? `2px solid ${BLUE}` : '1.5px solid #E2E8F0',
-        boxShadow: selected ? 'none' : '0 1px 3px rgba(0,0,0,0.04)',
-      }}
-    >
-      {selected && <span className="text-xs">✓</span>}
-      {label}
-    </button>
-  )
-}
-
-export default function Step2Terrain({ answers, onTerrainChange, onWeatherChange }: Step2TerrainProps) {
-  return (
-    <div className="space-y-10" style={{ animation: 'fadeSlideIn 0.3s ease-out both' }}>
-      <div className="text-center space-y-2">
-        <h1 className="text-4xl sm:text-5xl font-black tracking-tight" style={{ color: '#0D1526' }}>
-          Où roules-tu le plus souvent&nbsp;?
-        </h1>
-        <p className="text-base text-gray-500">Plusieurs choix possibles.</p>
+    <div className="space-y-10">
+      <div className="space-y-2">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary">
+          Étape 2
+        </p>
+        <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-q-text">
+          Où roules-tu ?
+        </h2>
+        <p className="text-q-text-muted">
+          Plusieurs choix possibles.{" "}
+          <span className="text-q-text-dim">
+            On combine pour trouver la bonne gomme.
+          </span>
+        </p>
       </div>
 
       <div className="space-y-8">
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider">Terrain principal</h2>
-            <span className="text-xs text-gray-400 font-normal">· choix multiple</span>
+            <h3 className="text-sm font-bold text-q-text-sub uppercase tracking-wider">
+              Terrain principal
+            </h3>
+            <span className="text-xs text-q-text-dim">· choix multiple</span>
           </div>
-          <div className="flex flex-wrap gap-2.5">
-            {TERRAIN_OPTIONS.map((opt) => (
-              <Chip
-                key={opt.id}
-                label={opt.label}
-                selected={answers.terrain.includes(opt.id)}
-                onClick={() => onTerrainChange(toggle(answers.terrain, opt.id))}
-              />
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {TERRAIN_OPTIONS.map((opt) => {
+              const sel = answers.terrain.includes(opt.id);
+              return (
+                <button
+                  key={opt.id}
+                  onClick={() =>
+                    onTerrainChange(toggle(answers.terrain, opt.id))
+                  }
+                  aria-pressed={sel}
+                  className={`relative flex flex-col items-center gap-2 p-5 rounded-2xl transition-all duration-200 cursor-pointer border-2 group ${sel
+                      ? "border-q-yellow shadow-[0_0_16px_rgba(252,229,0,0.1)]"
+                      : "border-q-border/50 hover:border-q-yellow/30"
+                    }`}
+                >
+                  <div
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${opt.color} flex items-center justify-center text-2xl transition-transform duration-200 group-hover:scale-110`}
+                  >
+                    {opt.emoji}
+                  </div>
+                  <span
+                    className={`text-sm font-semibold ${sel ? "text-q-yellow" : "text-q-text-sub"}`}
+                  >
+                    {opt.label}
+                  </span>
+                  {sel && (
+                    <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-q-yellow flex items-center justify-center">
+                      <svg viewBox="0 0 12 12" fill="none" width="8" height="8">
+                        <path
+                          d="M2 6l3 3 5-5"
+                          stroke="#000C34"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider">Conditions météo</h2>
-          <div className="flex flex-wrap gap-2.5">
-            {WEATHER_OPTIONS.map((opt) => (
-              <Chip
-                key={opt.id}
-                label={opt.label}
-                selected={answers.weather.includes(opt.id)}
-                onClick={() => onWeatherChange(toggle(answers.weather, opt.id))}
-              />
-            ))}
+          <h3 className="text-sm font-bold text-q-text-sub uppercase tracking-wider">
+            Conditions météo
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {WEATHER_OPTIONS.map((opt) => {
+              const sel = answers.weather.includes(opt.id);
+              return (
+                <button
+                  key={opt.id}
+                  onClick={() =>
+                    onWeatherChange(toggle(answers.weather, opt.id))
+                  }
+                  aria-pressed={sel}
+                  className={`flex items-center gap-2.5 px-5 py-3 rounded-full text-sm font-semibold transition-all duration-150 cursor-pointer border-2 ${sel
+                      ? "border-q-yellow bg-q-yellow/10 text-q-yellow"
+                      : "border-q-border/50 text-q-text-sub hover:border-q-yellow/30"
+                    }`}
+                >
+                  <span className="text-base">{opt.emoji}</span>
+                  {opt.label}
+                  {sel && <span className="text-xs">✓</span>}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
