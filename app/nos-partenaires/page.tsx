@@ -2,6 +2,7 @@
 
 import { get_suppliers, Supplier } from "@/lib/firestore";
 import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const DynamicMap = dynamic(
@@ -71,6 +72,8 @@ function MapLoading() {
 }
 
 export default function Page() {
+  const searchParams = useSearchParams();
+
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
     null,
   );
@@ -82,6 +85,11 @@ export default function Page() {
     get_suppliers()
       .map((data) => {
         setSuppliers(data);
+        const id_supplier = searchParams.get("id_supplier");
+        if (id_supplier !== null) {
+          setSelectedSupplier(data.find((s) => s.id === id_supplier) ?? null);
+        }
+
         setError(null);
         setLoading(false);
       })
@@ -90,7 +98,7 @@ export default function Page() {
         setSuppliers([]);
         setLoading(false);
       });
-  }, []);
+  }, [searchParams]);
 
   if (loading) return <MapLoading />;
   if (error) return <div>Erreur: {error}</div>;
