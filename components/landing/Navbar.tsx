@@ -3,36 +3,22 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import ThemeToggle from "@/components/shared/ThemeToggle";
-import { useFullpage } from "./FullpageWrapper";
 
 const navLinks = [
   { label: "La légende", href: "/legende" },
   { label: "Nos champions", href: "/champions" },
   { label: "Innovations", href: "/innovations" },
   { label: "Nos partenaires", href: "/nos-partenaires" },
+  { label: "Carte", href: "/map" },
 ];
-
-const routeLinks = [{ label: "Carte", href: "/map" }];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-    const { goTo } = useFullpage();
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const router = useRouter();
-
-  // Le défilement par sections n'existe que sur la home (FullpageWrapper).
-  // Depuis une autre page, on revient d'abord à l'accueil.
-  const handleSection = (section: number) => {
-    if (pathname === "/") {
-      goTo(section);
-    } else {
-      router.push("/");
-    }
-  };
 
   return (
     <>
@@ -124,10 +110,8 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <Link
                 key={link.label}
-                onClick={() => {
-                  handleSection(link.section);
-                  setMenuOpen(false);
-                }}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
                 className="text-2xl font-bold text-white"
               >
                 {link.label}

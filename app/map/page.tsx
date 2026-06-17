@@ -1,8 +1,9 @@
 "use client";
 
 import Navbar from "@/components/landing/Navbar";
+import { get_tracks, Tracks } from "@/lib/firestore";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const DynamicMap = dynamic(
   () => import("@/components/Map").then((mod) => mod.Map),
@@ -16,78 +17,8 @@ const DynamicMap = dynamic(
   },
 );
 
-type Route = {
-  id: string;
-  name: string;
-  region: string;
-  distance: string;
-  difficulty: string;
-  highlights: string;
-  gpx: string;
-  color: string;
-};
-
-const ROUTES: Route[] = [
-  {
-    id: "vignoble-alsace",
-    name: "EuroVelo 15 — Véloroute du Rhin",
-    region: "Alsace",
-    distance: "~180 km",
-    difficulty: "Facile",
-    highlights:
-      "Suit le Rhin et le canal du Rhône au Rhin. Réserves naturelles (Petite Camargue alsacienne), Strasbourg (cathédrale, Petite France), Neuf-Brisach (Vauban, UNESCO), villages typiques, ambiance transfrontalière France-Allemagne. Idéal pour familles ou voyages lents.",
-    gpx: "/vignoble_alsace.gpx",
-    color: "#FCE500",
-  },
-  {
-    id: "eurovelo-15-developed",
-    name: "EuroVelo 15 — Tracé développé",
-    region: "Rhin",
-    distance: "~1 230 km",
-    difficulty: "Modéré",
-    highlights:
-      "Le grand itinéraire du Rhin, de la source suisse à la mer du Nord. Tronçons balisés et aménagés traversant plusieurs pays le long du fleuve.",
-    gpx: "/EuroVelo 15 - developed.gpx",
-    color: "#38bdf8",
-  },
-  {
-    id: "boucle-moselle",
-    name: "Boucle de la Moselle",
-    region: "Lorraine",
-    distance: "~82 km",
-    difficulty: "Modéré",
-    highlights:
-      "Boucle au fil de la Moselle entre coteaux viticoles et patrimoine lorrain. Parcours roulant alternant bords de rivière et villages.",
-    gpx: "/boucle-moselle-82kms.gpx",
-    color: "#34d399",
-  },
-  {
-    id: "voie-bleue",
-    name: "La Voie Bleue",
-    region: "Lorraine",
-    distance: "~700 km",
-    difficulty: "Modéré",
-    highlights:
-      "De la frontière luxembourgeoise à Lyon, la Voie Bleue longe la Moselle puis la Saône. Itinéraire fluvial continu, jalonné de villes d'eau.",
-    gpx: "/La_Voie_Bleue.gpx",
-    color: "#60a5fa",
-  },
-  {
-    id: "lac-du-der",
-    name: "Tour du Lac du Der",
-    region: "Champagne",
-    distance: "~38 km",
-    difficulty: "Facile",
-    highlights:
-      "Boucle complète autour du plus grand lac artificiel de France. Plat et ombragé, paradis des oiseaux migrateurs et des grues cendrées.",
-    gpx: "/tour-du-lac-du-der.gpx",
-    color: "#f472b6",
-  },
-];
-
-const REGIONS = ["Alsace", "Lorraine", "Champagne", "Rhin"];
-const DIFFICULTIES = ["Facile", "Modéré", "Difficile"];
-const DISTANCES = ["Moins de 50 km", "50 à 100 km", "Plus de 100 km"];
+// Palette appliquée aux trajets dans l'ordre de réception.
+const PALETTE = ["#FCE500", "#38bdf8", "#34d399", "#60a5fa", "#f472b6", "#fb923c"];
 
 const FRANCE_CENTER: [number, number] = [46.6, 2.3];
 
@@ -117,56 +48,71 @@ function googleMapsUrl(points: Pt[]): string {
   return `https://www.google.com/maps/dir/?${params.toString()}${wp}`;
 }
 
-async function loadGpx(url: string): Promise<Array<[number, number]>> {
-  const res = await fetch(encodeURI(url));
-  if (!res.ok) throw new Error(`Tracé introuvable (${res.status})`);
-  const text = await res.text();
-  const xml = new DOMParser().parseFromString(text, "application/xml");
-  return Array.from(xml.getElementsByTagName("trkpt")).map((pt) => [
-    parseFloat(pt.getAttribute("lat") ?? "0"),
-    parseFloat(pt.getAttribute("lon") ?? "0"),
-  ]);
+// Apple Maps : uniquement départ → arrivée (pas de waypoints possibles via URL).
+function appleMapsUrl(points: Pt[]): string {
+  const origin = points[0];
+  const destination = points[points.length - 1];
+  const params = new URLSearchParams({
+    saddr: `${origin[0]},${origin[1]}`,
+    daddr: `${destination[0]},${destination[1]}`,
+  });
+  return `https://maps.apple.com/?${params.toString()}`;
 }
 
 export default function Page() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [segments, setSegments] = useState<Array<[number, number]>>([]);
-  const [loadingRoute, setLoadingRoute] = useState(false);
+  const [tracks, setTracks] = useState<Tracks[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cache] = useState<Map<string, Array<[number, number]>>>(new Map());
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [search, setSearch] = useState("");
 
-  const selectedRoute = ROUTES.find((r) => r.id === selectedId) ?? null;
+  useEffect(() => {
+    get_tracks()
+      .map((data) => {
+        console.log("tracks", data);
+        setTracks(data);
+        setError(null);
+        setLoading(false);
+      })
+      .mapErr((err) => {
+        setError(err);
+        setTracks([]);
+        setLoading(false);
+      });
+  }, []);
+
+  const selectedTrack =
+    selectedIndex !== null ? (tracks[selectedIndex] ?? null) : null;
+
+  const segments: Pt[] = useMemo(
+    () =>
+      selectedTrack
+        ? selectedTrack.segments.map((p) => [p.latitude, p.longitude])
+        : [],
+    [selectedTrack],
+  );
+
+  const selectedColor =
+    selectedIndex !== null
+      ? PALETTE[selectedIndex % PALETTE.length]
+      : "#FCE500";
   const hasRoute = segments.length > 1;
 
-  const selectRoute = async (route: Route) => {
-    // Re-cliquer sur le trajet actif le désélectionne.
-    if (selectedId === route.id) {
-      setSelectedId(null);
-      setSegments([]);
-      return;
-    }
-
-    setSelectedId(route.id);
-    setError(null);
-
-    const cached = cache.get(route.id);
-    if (cached) {
-      setSegments(cached);
-      return;
-    }
-
-    setLoadingRoute(true);
-    try {
-      const points = await loadGpx(route.gpx);
-      cache.set(route.id, points);
-      setSegments(points);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Erreur de chargement du tracé");
-      setSegments([]);
-    } finally {
-      setLoadingRoute(false);
-    }
+  const selectTrack = (index: number) => {
+    setSelectedIndex((current) => (current === index ? null : index));
   };
+
+  // Recherche par nom ou description, en conservant l'index d'origine.
+  const visibleTracks = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    const indexed = tracks.map((track, index) => ({ track, index }));
+    if (!q) return indexed;
+    return indexed.filter(
+      ({ track }) =>
+        track.name.toLowerCase().includes(q) ||
+        track.comment.toLowerCase().includes(q),
+    );
+  }, [tracks, search]);
 
   return (
     <main className="relative flex h-screen w-screen flex-col overflow-hidden bg-q-bg">
@@ -182,22 +128,16 @@ export default function Page() {
                 Itinéraires vélo
               </span>
               <h1 className="mt-1 text-2xl font-bold text-white drop-shadow-md md:text-3xl">
-                {selectedRoute ? selectedRoute.name : "Explorez nos trajets"}
+                {selectedTrack ? selectedTrack.name : "Explorez nos trajets"}
               </h1>
             </div>
-
-            {loadingRoute && (
-              <div className="absolute right-5 top-5 z-[500] rounded-full bg-q-card/90 px-4 py-2 text-sm text-q-text-sub backdrop-blur-md">
-                Chargement du tracé…
-              </div>
-            )}
 
             <DynamicMap
               zoom={6}
               center={FRANCE_CENTER}
               markers={[]}
               segments={segments}
-              segmentColor={selectedRoute?.color ?? "#FCE500"}
+              segmentColor={selectedColor}
               bound_type={segments.length > 0 ? "segments" : "center"}
               onclick={() => {}}
             />
@@ -215,6 +155,18 @@ export default function Page() {
               icon={<GoogleMapsIcon />}
               disabledTitle="Sélectionnez un trajet"
             />
+            <OpenInButton
+              label="Apple Plans"
+              href={hasRoute ? appleMapsUrl(segments) : null}
+              icon={<AppleIcon />}
+              disabledTitle="Sélectionnez un trajet"
+            />
+            <OpenInButton
+              label="Mappy"
+              href={null}
+              icon={<MappyIcon />}
+              disabledTitle="Mappy ne propose pas de lien d'itinéraire par coordonnées — indisponible pour l'instant"
+            />
           </div>
         </div>
 
@@ -226,15 +178,8 @@ export default function Page() {
               Sélectionnez un itinéraire pour l’afficher sur la carte.
             </p>
 
-            {/* Filtres (front uniquement pour l'instant) */}
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              <Filter label="Région" options={REGIONS} />
-              <Filter label="Difficulté" options={DIFFICULTIES} />
-              <Filter label="Distance" options={DISTANCES} />
-            </div>
-
-            {/* Barre de recherche (front uniquement pour l'instant) */}
-            <div className="relative mt-3">
+            {/* Barre de recherche */}
+            <div className="relative mt-4">
               <svg
                 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-q-text-muted"
                 viewBox="0 0 24 24"
@@ -249,6 +194,8 @@ export default function Page() {
               </svg>
               <input
                 type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Rechercher un trajet…"
                 className="w-full rounded-lg border border-q-border-sub bg-q-bg/60 py-2 pl-9 pr-3 text-sm text-white placeholder:text-q-text-muted focus:border-secondary focus:outline-none"
               />
@@ -257,18 +204,40 @@ export default function Page() {
 
           {/* Liste scrollable */}
           <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
+            {loading && (
+              <p className="px-1 text-sm text-q-text-muted">
+                Chargement des trajets…
+              </p>
+            )}
+
             {error && (
               <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">
                 {error}
               </p>
             )}
 
-            {ROUTES.map((route) => {
-              const active = route.id === selectedId;
+            {!loading && !error && tracks.length === 0 && (
+              <p className="px-1 text-sm text-q-text-muted">
+                Aucun trajet disponible.
+              </p>
+            )}
+
+            {!loading &&
+              !error &&
+              tracks.length > 0 &&
+              visibleTracks.length === 0 && (
+                <p className="px-1 text-sm text-q-text-muted">
+                  Aucun trajet ne correspond à « {search} ».
+                </p>
+              )}
+
+            {visibleTracks.map(({ track, index }) => {
+              const active = index === selectedIndex;
+              const color = PALETTE[index % PALETTE.length];
               return (
                 <button
-                  key={route.id}
-                  onClick={() => selectRoute(route)}
+                  key={`${track.name}-${index}`}
+                  onClick={() => selectTrack(index)}
                   className={`w-full rounded-xl border p-4 text-left transition-all ${
                     active
                       ? "border-secondary bg-q-card-hover"
@@ -276,27 +245,24 @@ export default function Page() {
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-bold text-white">{route.name}</h3>
+                    <h3 className="font-bold text-white">{track.name}</h3>
                     <span
                       className="mt-1 h-3 w-3 shrink-0 rounded-full"
-                      style={{ backgroundColor: route.color }}
+                      style={{ backgroundColor: color }}
                     />
                   </div>
 
                   <div className="mt-2 flex flex-wrap gap-2 text-xs">
                     <span className="rounded-full bg-q-bg/60 px-2 py-1 text-q-text-sub">
-                      {route.region}
+                      {track.distance}
                     </span>
                     <span className="rounded-full bg-q-bg/60 px-2 py-1 text-q-text-sub">
-                      {route.distance}
-                    </span>
-                    <span className="rounded-full bg-q-bg/60 px-2 py-1 text-q-text-sub">
-                      {route.difficulty}
+                      {track.difficulty}
                     </span>
                   </div>
 
                   <p className="mt-3 text-sm leading-relaxed text-q-text-muted">
-                    {route.highlights}
+                    {track.comment}
                   </p>
                 </button>
               );
@@ -382,21 +348,3 @@ function MappyIcon() {
   );
 }
 
-function Filter({ label, options }: { label: string; options: string[] }) {
-  return (
-    <select
-      defaultValue=""
-      aria-label={label}
-      className="min-w-0 rounded-lg border border-q-border-sub bg-q-bg/60 px-2 py-2 text-xs text-q-text-sub focus:border-secondary focus:outline-none"
-    >
-      <option value="" className="bg-q-card text-white">
-        {label}
-      </option>
-      {options.map((opt) => (
-        <option key={opt} value={opt} className="bg-q-card text-white">
-          {opt}
-        </option>
-      ))}
-    </select>
-  );
-}

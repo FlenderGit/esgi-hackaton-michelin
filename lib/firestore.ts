@@ -125,7 +125,7 @@ const tracks_schema = z.object({
 
 export type Tracks = z.infer<typeof tracks_schema>;
 
-const TRACKS_COLLECTION_NAME = "tires";
+const TRACKS_COLLECTION_NAME = "tracks";
 export function get_tracks(): ResultAsync<Array<Tracks>, string> {
   return ResultAsync.fromPromise(
     getDocs(collection(db, TRACKS_COLLECTION_NAME)),
