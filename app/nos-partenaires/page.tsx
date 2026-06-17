@@ -4,7 +4,7 @@ import Navbar from "@/components/landing/Navbar";
 import { get_suppliers, Supplier } from "@/lib/firestore";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const DynamicMap = dynamic(
   () => import("@/components/Map").then((mod) => mod.Map),
@@ -73,6 +73,12 @@ function MapLoading() {
 }
 
 export default function Page() {
+  <Suspense fallback={<div>Chargement...</div>}>
+    <MapWrapper />
+  </Suspense>;
+}
+
+function MapWrapper() {
   const searchParams = useSearchParams();
 
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
