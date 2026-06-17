@@ -49,8 +49,8 @@ export default function IntroClient() {
             priority
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-q-bg via-q-bg/70 to-q-bg/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-q-bg/80 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-q-bg via-q-bg/70 to-q-bg/30" />
+        <div className="absolute inset-0 bg-linear-to-r from-q-bg/80 to-transparent" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-8 w-full pt-24 pb-16">
           <div className="flex items-center gap-8">

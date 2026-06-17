@@ -22,7 +22,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed  top-0 left-0 z-999 flex w-full items-center justify-between px-6 py-4 md:px-8 md:py-6 lg:px-16 ${isHome ? "bg-transparent" : "bg-[var(--color-q-bg)]"}`}
+        className={`fixed  top-0 left-0 z-999 flex w-full items-center justify-between px-6 py-4 md:px-8 md:py-6 lg:px-16 ${isHome ? "bg-transparent" : "bg-q-bg"}`}
       >
         <Link href="/">
           <Image
@@ -30,7 +30,7 @@ export default function Navbar() {
             alt="Michelin"
             width={90}
             height={36}
-            className="md:h-12 md:w-[120px]"
+            className="md:h-12 md:w-30"
             priority
           />
         </Link>

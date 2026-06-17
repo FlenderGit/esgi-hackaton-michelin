@@ -95,7 +95,7 @@ function ScoreRing({ score, accent }: { score: number; accent: string }) {
   const offset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="relative flex items-center justify-center w-[72px] h-[72px]">
+    <div className="relative flex items-center justify-center w-18 h-18">
       <svg viewBox="0 0 64 64" width="72" height="72" className="-rotate-90">
         <circle
           cx="32"
@@ -375,7 +375,7 @@ export default function Step6Results({ answers, onRefine }: Step6ResultsProps) {
                 <th className="text-left px-6 py-3 text-q-text-dim font-semibold text-xs uppercase tracking-wider">
                   Critère
                 </th>
-                {topResults.map((tire, i) => {
+                {topResults.map((tire) => {
                   const brand = getBrand(tire.brandId);
                   return (
                     <th key={tire.id} className="px-4 py-3 text-center">

@@ -228,7 +228,7 @@ export default function QuestionnaireClient() {
     <div className="min-h-screen bg-q-bg text-q-text">
       <Navbar />
 
-      <div className="flex pt-[68px]">
+      <div className="flex pt-17">
         {/* Sidebar verticale (desktop) */}
         {phase === "form" && (
           <StepSidebar
@@ -243,7 +243,7 @@ export default function QuestionnaireClient() {
         <main className="flex-1 min-w-0 pb-32">
           {/* Barre de progression horizontale (mobile) */}
           {phase === "form" && (
-            <div className="lg:hidden sticky top-[68px] z-30 bg-q-bg/90 backdrop-blur-sm py-3 border-b border-q-border/10">
+            <div className="lg:hidden sticky top-17 z-30 bg-q-bg/90 backdrop-blur-sm py-3 border-b border-q-border/10">
               <CyclistProgressBar
                 currentStep={step}
                 totalSteps={TOTAL_STEPS}

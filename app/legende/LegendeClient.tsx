@@ -61,7 +61,11 @@ function Chapter({ m, index }: { m: Milestone; index: number }) {
   });
 
   const imageY = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.25, 1.1, 1.2]);
+  const imageScale = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    [1.25, 1.1, 1.2],
+  );
   const yearX = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
   const textY = useTransform(scrollYProgress, [0, 1], ["40%", "-20%"]);
 
@@ -82,14 +86,14 @@ function Chapter({ m, index }: { m: Milestone; index: number }) {
           className="absolute inset-0 h-full w-full object-cover"
           loading={index === 0 ? "eager" : "lazy"}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-q-bg via-q-bg/70 to-q-bg/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-q-bg via-transparent to-q-bg/40" />
+        <div className="absolute inset-0 bg-linear-to-r from-q-bg via-q-bg/70 to-q-bg/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-q-bg via-transparent to-q-bg/40" />
       </motion.div>
 
       {/* Année filigrane */}
       <motion.span
         aria-hidden
-        className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none whitespace-nowrap text-[28vw] font-black leading-none text-white/[0.06]"
+        className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none whitespace-nowrap text-[28vw] font-black leading-none text-white/6"
         style={{ x: yearX }}
       >
         {m.year}
@@ -109,7 +113,7 @@ function Chapter({ m, index }: { m: Milestone; index: number }) {
           <span className="text-sm font-bold uppercase tracking-[0.4em] text-secondary">
             {String(index + 1).padStart(2, "0")} — Chapitre
           </span>
-          <h2 className="mt-4 bg-gradient-to-br from-white to-white/60 bg-clip-text text-7xl font-black leading-none text-transparent md:text-9xl">
+          <h2 className="mt-4 bg-linear-to-br from-white to-white/60 bg-clip-text text-7xl font-black leading-none text-transparent md:text-9xl">
             {m.year}
           </h2>
           <h3 className="mt-4 text-2xl font-bold text-secondary md:text-4xl">
@@ -168,7 +172,7 @@ export default function LegendeClient() {
     <div className="relative bg-q-bg text-white">
       {/* Barre de progression */}
       <motion.div
-        className="fixed left-0 top-0 z-[60] h-1 w-full origin-left bg-secondary"
+        className="fixed left-0 top-0 z-60 h-1 w-full origin-left bg-secondary"
         style={{ scaleX: progress }}
       />
 
@@ -202,8 +206,8 @@ export default function LegendeClient() {
             preload="auto"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-q-bg via-q-bg/20 to-q-bg/30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-q-bg/60 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-q-bg via-q-bg/20 to-q-bg/30" />
+          <div className="absolute inset-0 bg-linear-to-r from-q-bg/60 to-transparent" />
         </motion.div>
 
         <motion.div
@@ -226,7 +230,7 @@ export default function LegendeClient() {
           >
             Les innovations qui font
             <br />
-            <span className="bg-gradient-to-r from-secondary to-yellow-200 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-secondary to-yellow-200 bg-clip-text text-transparent">
               la légende Michelin
             </span>
           </motion.h1>
@@ -302,7 +306,7 @@ export default function LegendeClient() {
             className="object-cover opacity-20"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-q-bg via-q-bg/80 to-q-bg" />
+          <div className="absolute inset-0 bg-linear-to-t from-q-bg via-q-bg/80 to-q-bg" />
         </div>
         <Reveal className="relative mx-auto max-w-3xl px-6 text-center">
           <h2 className="text-3xl font-black md:text-5xl">
