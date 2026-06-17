@@ -105,7 +105,7 @@ function PartenairesContent() {
   if (error) return <div>Erreur: {error}</div>;
 
   return (
-    <div>
+    <div className="relative h-screen w-screen">
       <Navbar />
 
       {loading ? (
@@ -113,7 +113,7 @@ function PartenairesContent() {
       ) : error ? (
         <div>Error: {error}</div>
       ) : (
-        <div className="relative">
+        <div className="relative h-full w-full">
           <div className="absolute top-32 left-4 z-500 flex flex-col gap-4">
             <FloatingSearchBar
               suppliers={suppliers}

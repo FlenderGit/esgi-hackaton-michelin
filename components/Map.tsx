@@ -20,6 +20,7 @@ type Props<T> = {
   segments: Array<[number, number]>;
   onClick: (data: T) => void;
   bound_type: "markers" | "segments" | "center";
+  segmentColor?: string;
 };
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -124,6 +125,7 @@ export function Map<T>({
   segments,
   onClick,
   bound_type,
+  segmentColor = "#2563eb",
 }: Props<T>) {
   const icon = useMemo(() => createPinIcon(), []);
   const mapRef = useRef<L.Map | null>(null);
@@ -132,7 +134,7 @@ export function Map<T>({
     <MapContainer
       center={center}
       zoom={zoom}
-      className="w-screen h-screen"
+      className="h-full w-full"
       attributionControl={false}
       zoomControl={false}
       doubleClickZoom={false}
@@ -156,7 +158,10 @@ export function Map<T>({
         />
       ))}
 
-      <Polyline pathOptions={{ color: "blue" }} positions={segments} />
+      <Polyline
+        pathOptions={{ color: segmentColor, weight: 4, opacity: 0.9 }}
+        positions={segments}
+      />
       <ZoomButtons mapRef={mapRef} />
     </MapContainer>
   );

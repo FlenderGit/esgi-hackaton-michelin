@@ -12,6 +12,7 @@ const navLinks = [
   { label: "Nos champions", href: "/champions" },
   { label: "Innovations", href: "/innovations" },
   { label: "Nos partenaires", href: "/nos-partenaires" },
+  { label: "Carte", href: "/map" },
 ];
 
 export default function Navbar() {
@@ -111,7 +112,7 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="text-2xl font-bold text-q-text"
+                className="text-2xl font-bold text-white"
               >
                 {link.label}
               </Link>
