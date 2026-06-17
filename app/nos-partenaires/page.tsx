@@ -1,5 +1,6 @@
 "use client";
 
+import Navbar from "@/components/landing/Navbar";
 import { get_suppliers, Supplier } from "@/lib/firestore";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
@@ -105,52 +106,62 @@ export default function Page() {
 
   return (
     <div>
-      <div className="absolute top-4 left-4 z-500 flex flex-col gap-4">
-        <FloatingSearchBar
-          suppliers={suppliers}
-          onselected={setSelectedSupplier}
-        />
-        {selectedSupplier !== null && (
-          <ServiceProviderCard
-            homepageUrl="https://"
-            article={{ title: "Roue XRL", url: "https://" }}
-            provider={selectedSupplier}
-            onClose={() => setSelectedSupplier(null)}
-          />
-        )}
-      </div>
+      <Navbar />
 
-      <DynamicMap
-        center={[48, 2.3]}
-        zoom={10}
-        markers={
-          selectedSupplier !== null
-            ? [
-                {
-                  name: selectedSupplier.name,
-                  location: [
-                    selectedSupplier.position.latitude,
-                    selectedSupplier.position.longitude,
-                  ],
-                  data: selectedSupplier,
-                },
-              ]
-            : suppliers.map((s) => ({
-                name: s.name,
-                location: [s.position.latitude, s.position.longitude],
-                data: s,
-              }))
-        }
-        segments={[
-          [48.8566, 2.3522],
-          [48.8584, 2.2945],
-        ]}
-        bound_type="markers"
-        onclick={(data) => {
-          console.log(data);
-          setSelectedSupplier(data);
-        }}
-      />
+      {loading ? (
+        <MapLoading />
+      ) : error ? (
+        <div>Error: {error}</div>
+      ) : (
+        <div className="relative">
+          <div className="absolute top-32 left-4 z-500 flex flex-col gap-4">
+            <FloatingSearchBar
+              suppliers={suppliers}
+              onselected={setSelectedSupplier}
+            />
+            {selectedSupplier !== null && (
+              <ServiceProviderCard
+                homepageUrl="https://"
+                article={{ title: "Roue XRL", url: "https://" }}
+                provider={selectedSupplier}
+                onClose={() => setSelectedSupplier(null)}
+              />
+            )}
+          </div>
+
+          <DynamicMap
+            center={[48, 2.3]}
+            zoom={10}
+            markers={
+              selectedSupplier !== null
+                ? [
+                    {
+                      name: selectedSupplier.name,
+                      location: [
+                        selectedSupplier.position.latitude,
+                        selectedSupplier.position.longitude,
+                      ],
+                      data: selectedSupplier,
+                    },
+                  ]
+                : suppliers.map((s) => ({
+                    name: s.name,
+                    location: [s.position.latitude, s.position.longitude],
+                    data: s,
+                  }))
+            }
+            segments={[
+              [48.8566, 2.3522],
+              [48.8584, 2.2945],
+            ]}
+            bound_type="markers"
+            onclick={(data) => {
+              console.log(data);
+              setSelectedSupplier(data);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
