@@ -48,16 +48,6 @@ function googleMapsUrl(points: Pt[]): string {
   return `https://www.google.com/maps/dir/?${params.toString()}${wp}`;
 }
 
-// Apple Maps : uniquement départ → arrivée (pas de waypoints possibles via URL).
-function appleMapsUrl(points: Pt[]): string {
-  const origin = points[0];
-  const destination = points[points.length - 1];
-  const params = new URLSearchParams({
-    saddr: `${origin[0]},${origin[1]}`,
-    daddr: `${destination[0]},${destination[1]}`,
-  });
-  return `https://maps.apple.com/?${params.toString()}`;
-}
 
 export default function Page() {
   const [tracks, setTracks] = useState<Tracks[]>([]);
@@ -154,18 +144,6 @@ export default function Page() {
               href={hasRoute ? googleMapsUrl(segments) : null}
               icon={<GoogleMapsIcon />}
               disabledTitle="Sélectionnez un trajet"
-            />
-            <OpenInButton
-              label="Apple Plans"
-              href={hasRoute ? appleMapsUrl(segments) : null}
-              icon={<AppleIcon />}
-              disabledTitle="Sélectionnez un trajet"
-            />
-            <OpenInButton
-              label="Mappy"
-              href={null}
-              icon={<MappyIcon />}
-              disabledTitle="Mappy ne propose pas de lien d'itinéraire par coordonnées — indisponible pour l'instant"
             />
           </div>
         </div>
@@ -322,28 +300,6 @@ function GoogleMapsIcon() {
         d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
       />
       <circle cx="12" cy="9" r="2.6" fill="#fff" />
-    </svg>
-  );
-}
-
-function AppleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 text-white" aria-hidden>
-      <path
-        fill="currentColor"
-        d="M16.365 1.43c0 1.14-.46 2.22-1.2 3.02-.8.86-2.09 1.52-3.16 1.43-.13-1.1.45-2.27 1.16-3.05.78-.86 2.16-1.5 3.2-1.4zM20.9 17.1c-.55 1.27-.82 1.84-1.53 2.97-.99 1.57-2.39 3.53-4.12 3.55-1.54.01-1.93-1-4.02-.99-2.09.01-2.52 1.01-4.06.99-1.73-.02-3.05-1.79-4.04-3.36C.58 16.06.29 11.21 2.04 8.6c1.24-1.86 3.2-2.95 5.04-2.95 1.87 0 3.05 1.03 4.6 1.03 1.5 0 2.42-1.03 4.59-1.03 1.64 0 3.37.89 4.6 2.43-4.04 2.21-3.38 7.98.03 9.02z"
-      />
-    </svg>
-  );
-}
-
-function MappyIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-      <path
-        fill="currentColor"
-        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"
-      />
     </svg>
   );
 }
