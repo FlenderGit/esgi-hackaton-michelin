@@ -1,83 +1,108 @@
-import type { WizardAnswers, PriorityKey } from '@/app/configurateur/data'
+import type { WizardAnswers, PriorityKey } from "@/app/configurateur/data";
 
-const BLUE = '#27509B'
-
-const CRITERIA: { id: PriorityKey; label: string; desc: string }[] = [
-  { id: 'adherence', label: 'Adhérence', desc: 'Grip sur terrain sec & humide' },
-  { id: 'anti_crevaison', label: 'Anti-crevaison', desc: 'Protection contre les crevaisons' },
-  { id: 'vitesse', label: 'Vitesse / rendement', desc: 'Faible résistance au roulement' },
-  { id: 'confort', label: 'Confort', desc: 'Absorption des chocs et souplesse' },
-  { id: 'longevite', label: 'Longévité', desc: 'Durée de vie maximale du pneu' },
-  { id: 'poids', label: 'Poids', desc: 'Pneu léger pour la performance' },
-]
+const CRITERIA: {
+  id: PriorityKey;
+  label: string;
+  desc: string;
+  emoji: string;
+}[] = [
+  {
+    id: "adherence",
+    label: "Adhérence",
+    desc: "Grip virages & freinage",
+    emoji: "🎯",
+  },
+  {
+    id: "anti_crevaison",
+    label: "Anti-crevaison",
+    desc: "Résistance aux perforations",
+    emoji: "🛡️",
+  },
+  {
+    id: "vitesse",
+    label: "Vitesse / rendement",
+    desc: "Moins de résistance au roulement",
+    emoji: "⚡",
+  },
+  {
+    id: "confort",
+    label: "Confort",
+    desc: "Absorption des chocs",
+    emoji: "🍃",
+  },
+  {
+    id: "longevite",
+    label: "Longévité",
+    desc: "Durée de vie de la gomme",
+    emoji: "🔄",
+  },
+  { id: "poids", label: "Poids", desc: "Légèreté pour relancer", emoji: "🪶" },
+];
 
 interface Step3PrioritiesProps {
-  answers: WizardAnswers
-  onChange: (priorities: PriorityKey[]) => void
+  answers: WizardAnswers;
+  onChange: (priorities: PriorityKey[]) => void;
 }
 
-export default function Step3Priorities({ answers, onChange }: Step3PrioritiesProps) {
-  const selected = answers.priorities
+export default function Step3Priorities({
+  answers,
+  onChange,
+}: Step3PrioritiesProps) {
+  const selected = answers.priorities;
 
   function handleClick(id: PriorityKey) {
     if (selected.includes(id)) {
-      onChange(selected.filter((p) => p !== id))
+      onChange(selected.filter((p) => p !== id));
     } else if (selected.length < 3) {
-      onChange([...selected, id])
+      onChange([...selected, id]);
     }
   }
 
   return (
-    <div className="space-y-8" style={{ animation: 'fadeSlideIn 0.3s ease-out both' }}>
-      <div className="text-center space-y-2">
-        <h1 className="text-4xl sm:text-5xl font-black tracking-tight" style={{ color: '#0D1526' }}>
-          Classe ce qui compte le plus
-        </h1>
-        <p className="text-base text-gray-500">
-          Touche dans l&apos;ordre tes <strong style={{ color: '#0D1526' }}>3 critères</strong> les plus importants.
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary">
+          Étape 3
+        </p>
+        <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-q-text">
+          Qu&apos;est-ce qui compte le plus ?
+        </h2>
+        <p className="text-q-text-muted">
+          Sélectionne tes <strong className="text-q-text">3 critères</strong>{" "}
+          prioritaires. Le 1er pèse le plus.
         </p>
       </div>
 
-      {/* Selected badges */}
       {selected.length > 0 && (
-        <div
-          className="flex flex-wrap gap-2 justify-center"
-          style={{ animation: 'fadeSlideIn 0.2s ease-out both' }}
-        >
+        <div className="flex flex-wrap gap-2">
           {selected.map((id, idx) => {
-            const crit = CRITERIA.find((c) => c.id === id)!
+            const crit = CRITERIA.find((c) => c.id === id)!;
             return (
               <div
                 key={id}
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-sm font-bold"
-                style={{ background: BLUE, color: '#ffffff' }}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-bold bg-q-yellow text-q-bg"
               >
-                <span
-                  className="flex items-center justify-center w-5 h-5 rounded-full text-xs font-black"
-                  style={{ background: '#ffffff', color: BLUE }}
-                >
+                <span className="flex items-center justify-center w-5 h-5 rounded-full text-xs font-black bg-q-bg text-q-yellow">
                   {idx + 1}
                 </span>
-                {crit.label}
+                {crit.emoji} {crit.label}
                 <button
                   onClick={() => onChange(selected.filter((p) => p !== id))}
-                  className="opacity-70 hover:opacity-100 text-sm cursor-pointer"
-                  style={{ lineHeight: 1 }}
+                  className="opacity-70 hover:opacity-100 cursor-pointer ml-0.5"
                 >
                   ×
                 </button>
               </div>
-            )
+            );
           })}
         </div>
       )}
 
-      {/* Criteria grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {CRITERIA.map((crit) => {
-          const idx = selected.indexOf(crit.id)
-          const isSelected = idx >= 0
-          const isFull = selected.length >= 3 && !isSelected
+          const idx = selected.indexOf(crit.id);
+          const isSelected = idx >= 0;
+          const isFull = selected.length >= 3 && !isSelected;
 
           return (
             <button
@@ -85,43 +110,40 @@ export default function Step3Priorities({ answers, onChange }: Step3PrioritiesPr
               onClick={() => !isFull && handleClick(crit.id)}
               disabled={isFull}
               aria-pressed={isSelected}
-              className="flex items-center gap-4 p-4 rounded-2xl text-left transition-all duration-150 cursor-pointer w-full"
-              style={{
-                background: isSelected ? 'rgba(39,80,155,0.06)' : isFull ? '#F9FAFB' : '#FFFFFF',
-                border: isSelected ? `2px solid ${BLUE}` : '1.5px solid #E2E8F0',
-                opacity: isFull ? 0.45 : 1,
-                cursor: isFull ? 'not-allowed' : 'pointer',
-                boxShadow: isSelected ? 'none' : '0 1px 3px rgba(0,0,0,0.04)',
-              }}
+              className={`flex items-center gap-4 p-4 rounded-2xl text-left transition-all duration-200 w-full border-2 group ${
+                isSelected
+                  ? "border-q-yellow bg-q-yellow/8"
+                  : isFull
+                    ? "border-q-border/30 bg-q-card/30 opacity-35 cursor-not-allowed"
+                    : "border-q-border/50 hover:border-q-yellow/30 cursor-pointer"
+              }`}
             >
-              {/* Number/dot indicator */}
               <span
-                className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full text-sm font-black transition-all"
-                style={{
-                  background: isSelected ? BLUE : '#F0F2F5',
-                  color: isSelected ? '#ffffff' : '#9CA3AF',
-                }}
+                className={`shrink-0 flex items-center justify-center w-10 h-10 rounded-xl text-lg transition-all ${
+                  isSelected
+                    ? "bg-q-yellow text-q-bg font-black text-sm"
+                    : "bg-q-card/60"
+                }`}
               >
-                {isSelected ? idx + 1 : '·'}
+                {isSelected ? idx + 1 : crit.emoji}
               </span>
 
-              <div>
-                <p className="font-semibold text-[15px]" style={{ color: '#0D1526' }}>{crit.label}</p>
-                <p className="text-sm text-gray-400">{crit.desc}</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-[15px] text-q-text">
+                  {crit.label}
+                </p>
+                <p className="text-sm text-q-text-muted">{crit.desc}</p>
               </div>
             </button>
-          )
+          );
         })}
       </div>
 
       {selected.length === 3 && (
-        <p
-          className="text-sm text-center text-gray-400"
-          style={{ animation: 'fadeSlideIn 0.2s ease-out both' }}
-        >
-          Top 3 sélectionné — retire un critère pour en modifier un.
+        <p className="text-sm text-q-text-dim">
+          Top 3 sélectionné — retire un critère pour en changer un.
         </p>
       )}
     </div>
-  )
+  );
 }

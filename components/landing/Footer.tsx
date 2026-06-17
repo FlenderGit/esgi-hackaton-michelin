@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const navLinks = [
-  { label: "La légende", href: "#legende" },
+  { label: "La légende", href: "/legende" },
   { label: "Nos champions", href: "#champions" },
 ];
 
