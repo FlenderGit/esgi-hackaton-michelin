@@ -4,7 +4,7 @@ import Navbar from "@/components/landing/Navbar";
 import { get_suppliers, Supplier } from "@/lib/firestore";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const DynamicMap = dynamic(
   () => import("@/components/Map").then((mod) => mod.Map),
@@ -12,7 +12,7 @@ const DynamicMap = dynamic(
     ssr: false,
     loading: () => <MapLoading />,
   },
-);
+) as typeof import("@/components/Map").Map;
 
 function MapLoading() {
   return (
@@ -72,7 +72,7 @@ function MapLoading() {
   );
 }
 
-export default function Page() {
+function PartenairesContent() {
   const searchParams = useSearchParams();
 
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
@@ -129,7 +129,7 @@ export default function Page() {
             )}
           </div>
 
-          <DynamicMap
+          <DynamicMap<Supplier>
             center={[48, 2.3]}
             zoom={10}
             markers={
@@ -155,7 +155,7 @@ export default function Page() {
               [48.8584, 2.2945],
             ]}
             bound_type="markers"
-            onclick={(data) => {
+            onClick={(data) => {
               console.log(data);
               setSelectedSupplier(data as any);
             }}
@@ -163,6 +163,14 @@ export default function Page() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<MapLoading />}>
+      <PartenairesContent />
+    </Suspense>
   );
 }
 
@@ -245,7 +253,7 @@ const FloatingSearchBar = ({
                   </p>
                 </div>
                 <span
-                  className={`ml-2 w-2 h-2 rounded-full flex-shrink-0 mt-1 ${
+                  className={`ml-2 w-2 h-2 rounded-full shrink-0 mt-1 ${
                     supplier.active ? "bg-green-500" : "bg-gray-300"
                   }`}
                 />
@@ -320,7 +328,11 @@ const ServiceProviderCard: React.FC<ServiceProviderCardProps> = ({
         </button>
       </div>
 
-      <img className="w-full" src="https://placeimg.dev/400x300/4F46E5" />
+      <img
+        className="w-full"
+        src="https://placeimg.dev/400x300/4F46E5"
+        alt="image placeholder"
+      />
 
       <div className="p-4 space-y-3">
         <a

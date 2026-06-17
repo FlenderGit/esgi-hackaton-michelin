@@ -21,8 +21,8 @@ export default function QuizIntro({ onStart }: QuizIntroProps) {
           sizes="100vw"
         />
         {/* Dark overlay — intentionally hardcoded so the text stays lisible en mode clair */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/40" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-6 md:px-8 w-full pt-28 pb-20">
@@ -43,7 +43,8 @@ export default function QuizIntro({ onStart }: QuizIntroProps) {
           </h1>
 
           <p className="text-lg text-white/70 leading-relaxed max-w-lg">
-            20 questions pour découvrir quel cycliste tu es vraiment. Sois honnête — ou pas, on jugera quand même.
+            20 questions pour découvrir quel cycliste tu es vraiment. Sois
+            honnête — ou pas, on jugera quand même.
           </p>
         </motion.div>
 
@@ -70,7 +71,9 @@ export default function QuizIntro({ onStart }: QuizIntroProps) {
           >
             <div className="flex items-center gap-2">
               <span className="text-xl">🎯</span>
-              <span className="font-black text-white text-lg">Mode Complet</span>
+              <span className="font-black text-white text-lg">
+                Mode Complet
+              </span>
             </div>
             <p className="text-sm text-white/60">20 questions · ~5 minutes</p>
           </button>

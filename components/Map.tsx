@@ -18,7 +18,7 @@ type Props<T> = {
   zoom: number;
   markers: Array<Marker<T>>;
   segments: Array<[number, number]>;
-  onclick: (data: T) => void;
+  onClick: (data: T) => void;
   bound_type: "markers" | "segments" | "center";
   segmentColor?: string;
 };
@@ -123,7 +123,7 @@ export function Map<T>({
   zoom,
   markers,
   segments,
-  onclick,
+  onClick,
   bound_type,
   segmentColor = "#2563eb",
 }: Props<T>) {
@@ -154,7 +154,7 @@ export function Map<T>({
           position={m.location}
           key={m.location.toString()}
           icon={icon}
-          eventHandlers={{ click: () => onclick(m.data) }}
+          eventHandlers={{ click: () => onClick(m.data) }}
         />
       ))}
 
