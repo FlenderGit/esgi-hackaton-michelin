@@ -58,34 +58,13 @@ function canGoNext(step: number, a: WizardAnswers): boolean {
 
 type Phase = "form" | "results";
 
-function readSaved() {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw) as { answers?: WizardAnswers; step?: number };
-  } catch { /* ignore */ }
-  return null;
-}
-
 export default function QuestionnaireClient() {
-  const [step, setStep] = useState<number>(() => {
-    const saved = readSaved();
-    return saved?.step ? Math.min(Math.max(saved.step, 1), TOTAL_STEPS) : 1;
-  });
-  const [answers, setAnswers] = useState<WizardAnswers>(() => {
-    const saved = readSaved();
-    return saved?.answers ? { ...EMPTY_ANSWERS, ...saved.answers } : EMPTY_ANSWERS;
-  });
+  // Toujours repartir de zéro à chaque accès au configurateur (pas de restauration de progression précédente)
+  const [step, setStep] = useState<number>(1);
+  const [answers, setAnswers] = useState<WizardAnswers>(EMPTY_ANSWERS);
   const [direction, setDirection] = useState(1);
   const [phase, setPhase] = useState<Phase>("form");
   const autoAdvance = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Sauvegarde
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, step }));
-    } catch { /* ignore */ }
-  }, [answers, step]);
 
   // Scroll en haut à l'arrivée sur les résultats
   useEffect(() => {
@@ -104,6 +83,13 @@ export default function QuestionnaireClient() {
       setStep(step + 1);
     } else {
       setDirection(1);
+      // On arrive à la fin du parcours → on nettoie toute progression sauvegardée
+      // pour que le prochain accès au configurateur reparte de zéro.
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* ignore */
+      }
       setPhase("results");
     }
   }, [step]);
@@ -242,7 +228,7 @@ export default function QuestionnaireClient() {
     <div className="min-h-screen bg-q-bg text-q-text">
       <Navbar />
 
-      <div className="flex pt-[68px]">
+      <div className="flex pt-17">
         {/* Sidebar verticale (desktop) */}
         {phase === "form" && (
           <StepSidebar
@@ -257,7 +243,7 @@ export default function QuestionnaireClient() {
         <main className="flex-1 min-w-0 pb-32">
           {/* Barre de progression horizontale (mobile) */}
           {phase === "form" && (
-            <div className="lg:hidden sticky top-[68px] z-30 bg-q-bg/90 backdrop-blur-sm py-3 border-b border-q-border/10">
+            <div className="lg:hidden sticky top-17 z-30 bg-q-bg/90 backdrop-blur-sm py-3 border-b border-q-border/10">
               <CyclistProgressBar
                 currentStep={step}
                 totalSteps={TOTAL_STEPS}

@@ -53,7 +53,7 @@ export default function QuizQuestion({
   return (
     <div className="flex flex-col min-h-[calc(100vh-72px)]">
       {/* ── Barre de progression ───────────────────────────────── */}
-      <div className="sticky top-[68px] md:top-24 z-40 bg-q-bg border-b border-q-border/10 px-6 md:px-8 py-4">
+      <div className="sticky top-17 md:top-24 z-40 bg-q-bg border-b border-q-border/10 px-6 md:px-8 py-4">
         <div className="max-w-3xl mx-auto space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-q-text-muted uppercase tracking-[0.15em]">
