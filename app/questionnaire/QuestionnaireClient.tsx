@@ -89,7 +89,7 @@ export default function QuestionnaireClient() {
     <div className="min-h-screen bg-q-bg text-q-text">
       <Navbar />
 
-      <div className="pt-[72px]">
+      <div className="pt-[68px] md:pt-24">
         {phase === "intro" && <QuizIntro onStart={handleStart} />}
 
         {phase === "quiz" && currentQuestion && (

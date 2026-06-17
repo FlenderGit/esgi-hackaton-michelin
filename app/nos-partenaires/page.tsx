@@ -157,7 +157,7 @@ export default function Page() {
             bound_type="markers"
             onclick={(data) => {
               console.log(data);
-              setSelectedSupplier(data);
+              setSelectedSupplier(data as any);
             }}
           />
         </div>
