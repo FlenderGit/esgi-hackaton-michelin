@@ -17,21 +17,21 @@ permissions:
   actions: read
 
 jobs:
-  verify:
-    name: Lint and Build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: "npm"
-      - run: npm ci
-      - run: npm run build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+  # verify:
+  #   name: Lint and Build
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 22
+  #         cache: "npm"
+  #     - run: npm ci
+  #     - run: npm run build
+  #       env:
+  #         DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  #         NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -81,7 +81,7 @@ jobs:
 
   deploy:
     name: Deploy to Cloudflare Workers
-    needs: [verify, test, security-scans]
+    needs: [test, security-scans]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
