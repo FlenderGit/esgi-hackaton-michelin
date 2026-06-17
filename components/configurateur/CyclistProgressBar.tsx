@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 interface CyclistProgressBarProps {
   currentStep: number;
   totalSteps: number;
+  labels?: string[];
 }
 
 export default function CyclistProgressBar({
   currentStep,
   totalSteps,
+  labels,
 }: CyclistProgressBarProps) {
   const progress = currentStep / totalSteps;
 
@@ -143,6 +145,12 @@ export default function CyclistProgressBar({
       {/* Label */}
       <p className="text-center text-xs text-q-text-muted mt-2">
         Étape {currentStep} sur {totalSteps}
+        {labels?.[currentStep - 1] && (
+          <span className="text-q-text font-semibold">
+            {" "}
+            · {labels[currentStep - 1]}
+          </span>
+        )}
       </p>
     </div>
   );

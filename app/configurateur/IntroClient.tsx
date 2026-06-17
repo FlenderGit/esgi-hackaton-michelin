@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import ConfigNav from "@/components/configurateur/ConfigNav";
 
 const FEATURES = [
   {
@@ -25,25 +26,7 @@ const FEATURES = [
 export default function IntroClient() {
   return (
     <div className="min-h-screen bg-q-bg text-q-text">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-q-bg/80 backdrop-blur-md border-b border-q-border/20">
-        <div className="max-w-6xl mx-auto px-6 md:px-8 h-[68px] flex items-center justify-between">
-          <Link href="/">
-            <Image
-              src="/images/logo.png"
-              alt="Michelin"
-              width={90}
-              height={36}
-              priority
-            />
-          </Link>
-          <Link
-            href="/"
-            className="text-sm font-medium text-q-text-muted hover:text-q-text transition-colors"
-          >
-            Retour à l&apos;accueil
-          </Link>
-        </div>
-      </nav>
+      <ConfigNav backHref="/" backLabel="Accueil" />
 
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0">

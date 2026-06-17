@@ -1,17 +1,25 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type {
-  WizardAnswers,
-  RiderProfile,
-  TerrainType,
-  WeatherType,
-  PriorityKey,
-  WizardBikeType,
-  BudgetRange,
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowLeft,
+  faArrowRight,
+  faUser,
+  faMountainSun,
+  faListCheck,
+  faBicycle,
+  faGear,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  type WizardAnswers,
+  type RiderProfile,
+  type TerrainType,
+  type WeatherType,
+  type PriorityKey,
+  type WizardBikeType,
+  type BudgetRange,
 } from "../data";
 import Step1Profile from "@/components/configurateur/Step1Profile";
 import Step2Terrain from "@/components/configurateur/Step2Terrain";
@@ -24,6 +32,8 @@ import {
 } from "@/components/configurateur/StepAdvanced";
 import Step6Results from "@/components/configurateur/Step6Results";
 import CyclistProgressBar from "@/components/configurateur/CyclistProgressBar";
+import ConfigNav from "@/components/configurateur/ConfigNav";
+import StepSidebar from "@/components/configurateur/StepSidebar";
 
 const EMPTY_ANSWERS: WizardAnswers = {
   terrain: [],
@@ -32,6 +42,10 @@ const EMPTY_ANSWERS: WizardAnswers = {
 };
 
 const TOTAL_STEPS = 5;
+const STORAGE_KEY = "michelin-configurateur";
+
+const STEP_TITLES = ["Profil", "Terrain", "Priorités", "Vélo", "Réglages"];
+const STEP_ICONS = [faUser, faMountainSun, faListCheck, faBicycle, faGear];
 
 function canGoNext(step: number, a: WizardAnswers): boolean {
   if (step === 1) return !!a.profile;
@@ -42,67 +56,122 @@ function canGoNext(step: number, a: WizardAnswers): boolean {
   return false;
 }
 
+type Phase = "form" | "results";
+
 export default function QuestionnaireClient() {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<WizardAnswers>(EMPTY_ANSWERS);
   const [direction, setDirection] = useState(1);
-  const [showResults, setShowResults] = useState(false);
+  const [phase, setPhase] = useState<Phase>("form");
+  const hydrated = useRef(false);
+  const autoAdvance = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Restauration depuis localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as {
+          answers?: WizardAnswers;
+          step?: number;
+        };
+        if (parsed.answers) setAnswers({ ...EMPTY_ANSWERS, ...parsed.answers });
+        if (parsed.step)
+          setStep(Math.min(Math.max(parsed.step, 1), TOTAL_STEPS));
+      }
+    } catch {
+      /* ignore */
+    }
+    hydrated.current = true;
+  }, []);
+
+  // Sauvegarde
+  useEffect(() => {
+    if (!hydrated.current) return;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, step }));
+  }, [answers, step]);
 
   const update = useCallback((patch: Partial<WizardAnswers>) => {
     setAnswers((prev) => ({ ...prev, ...patch }));
   }, []);
 
-  function goNext() {
+  const goNext = useCallback(() => {
     if (step < TOTAL_STEPS) {
       setDirection(1);
       setStep(step + 1);
     } else {
-      setShowResults(true);
+      setDirection(1);
+      setPhase("results");
     }
-  }
+  }, [step]);
 
-  function goBack() {
-    if (showResults) {
-      setShowResults(false);
+  const goBack = useCallback(() => {
+    if (phase === "results") {
+      setPhase("form");
+      setStep(TOTAL_STEPS);
       return;
     }
     if (step > 1) {
       setDirection(-1);
       setStep(step - 1);
     }
-  }
+  }, [phase, step]);
 
   function handleReset() {
     setAnswers(EMPTY_ANSWERS);
-    setShowResults(false);
+    setPhase("form");
     setStep(1);
     setDirection(-1);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
   }
 
+  function goToStep(target: number) {
+    setDirection(target < step ? -1 : 1);
+    setPhase("form");
+    setStep(target);
+  }
+
+  // Auto-avance après sélection du profil
+  function handleProfileChange(p: RiderProfile) {
+    update({ profile: p });
+    if (autoAdvance.current) clearTimeout(autoAdvance.current);
+    autoAdvance.current = setTimeout(() => goNext(), 450);
+  }
+
+  const isNextDisabled = phase === "form" && !canGoNext(step, answers);
+
+  // Navigation clavier
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (phase === "results") return;
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (e.key === "ArrowRight") {
+        if (!isNextDisabled) goNext();
+      } else if (e.key === "ArrowLeft") {
+        goBack();
+      } else if (e.key === "Enter" && tag !== "BUTTON" && tag !== "A") {
+        if (!isNextDisabled) goNext();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [phase, isNextDisabled, goNext, goBack]);
+
   const variants = {
-    enter: (d: number) => ({
-      x: d > 0 ? 80 : -80,
-      opacity: 0,
-    }),
+    enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit: (d: number) => ({
-      x: d > 0 ? -80 : 80,
-      opacity: 0,
-    }),
+    exit: (d: number) => ({ x: d > 0 ? -60 : 60, opacity: 0 }),
   };
 
   function renderStep() {
-    if (showResults) {
-      return <Step6Results answers={answers} onRefine={handleReset} />;
-    }
-
     switch (step) {
       case 1:
         return (
-          <Step1Profile
-            answers={answers}
-            onChange={(p: RiderProfile) => update({ profile: p })}
-          />
+          <Step1Profile answers={answers} onChange={handleProfileChange} />
         );
       case 2:
         return (
@@ -166,61 +235,60 @@ export default function QuestionnaireClient() {
     }
   }
 
-  const isNextDisabled = !showResults && !canGoNext(step, answers);
-
   return (
-    <div className="min-h-screen bg-q-bg text-q-text flex flex-col">
-      {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-q-bg/90 backdrop-blur-md border-b border-q-border/20">
-        <div className="max-w-6xl mx-auto px-6 md:px-8 h-[68px] flex items-center justify-between">
-          <Link href="/">
-            <Image
-              src="/images/logo.png"
-              alt="Michelin"
-              width={90}
-              height={36}
-              priority
-            />
-          </Link>
-          <Link
-            href="/configurateur"
-            className="text-sm font-medium text-q-text-muted hover:text-q-text transition-colors"
-          >
-            &larr; Retour
-          </Link>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-q-bg text-q-text">
+      <ConfigNav backHref="/configurateur" backLabel="Retour" />
 
-      {/* Progress bar */}
-      {!showResults && (
-        <div className="fixed top-[68px] left-0 right-0 z-40 bg-q-bg/80 backdrop-blur-sm py-4 border-b border-q-border/10">
-          <CyclistProgressBar currentStep={step} totalSteps={TOTAL_STEPS} />
-        </div>
-      )}
+      <div className="flex pt-[68px]">
+        {/* Sidebar verticale (desktop) */}
+        {phase === "form" && (
+          <StepSidebar
+            labels={STEP_TITLES}
+            icons={STEP_ICONS}
+            currentStep={step}
+            onStepClick={goToStep}
+          />
+        )}
 
-      {/* Content */}
-      <main className="flex-1 pt-[160px] pb-32 px-6 md:px-8">
-        <div className="max-w-4xl mx-auto">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={showResults ? "results" : step}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {renderStep()}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </main>
+        {/* Content */}
+        <main className="flex-1 min-w-0 pb-32">
+          {/* Barre de progression horizontale (mobile) */}
+          {phase === "form" && (
+            <div className="lg:hidden sticky top-[68px] z-30 bg-q-bg/90 backdrop-blur-sm py-3 border-b border-q-border/10">
+              <CyclistProgressBar
+                currentStep={step}
+                totalSteps={TOTAL_STEPS}
+                labels={STEP_TITLES}
+              />
+            </div>
+          )}
+
+          <div className="max-w-4xl mx-auto px-6 md:px-8 pt-10">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={phase === "form" ? `step-${step}` : phase}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {phase === "form" ? (
+                  renderStep()
+                ) : (
+                  <Step6Results answers={answers} onRefine={handleReset} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </main>
+      </div>
 
       {/* Footer navigation */}
-      {!showResults && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-q-bg/90 backdrop-blur-md border-t border-q-border/20">
-          <div className="max-w-4xl mx-auto px-6 md:px-8 py-4 flex items-center justify-between">
+      {phase === "form" && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-q-bg/90 backdrop-blur-md border-t border-q-border/20 lg:pl-72">
+          <div className="max-w-4xl mx-auto px-6 md:px-8 py-4 flex items-center justify-between gap-4">
             <button
               onClick={goBack}
               disabled={step === 1}
@@ -230,20 +298,19 @@ export default function QuestionnaireClient() {
                   : "border-q-border/50 text-q-text-sub hover:border-q-yellow/30 hover:text-q-text"
               }`}
             >
-              <svg
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                width="16"
-                height="16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <FontAwesomeIcon icon={faArrowLeft} className="w-3.5 h-3.5" />
               Précédent
             </button>
+
+            <span className="hidden sm:block text-xs text-q-text-dim">
+              Utilise{" "}
+              <kbd className="px-1.5 py-0.5 rounded bg-q-card/60 border border-q-border/30">
+                ←
+              </kbd>{" "}
+              <kbd className="px-1.5 py-0.5 rounded bg-q-card/60 border border-q-border/30">
+                →
+              </kbd>
+            </span>
 
             <button
               onClick={goNext}
@@ -254,19 +321,8 @@ export default function QuestionnaireClient() {
                   : "bg-secondary text-neutral hover:brightness-110"
               }`}
             >
-              {step === TOTAL_STEPS ? "Voir les résultats" : "Suivant"}
-              <svg
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                width="16"
-                height="16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              {step === TOTAL_STEPS ? "Voir mes recommandations" : "Suivant"}
+              <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
