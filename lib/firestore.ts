@@ -33,6 +33,9 @@ export const supplier_schema = z.object({
   id: z.string().regex(/^F\d{3}$/),
   name: z.string().min(1),
   city: z.string().min(1),
+  address: z.string().optional(),
+  rating: z.number().min(0).max(5).optional(),
+  phone: z.string().optional(),
   position: geopoint_schema,
   speciality: z.string().min(1),
   active: z.boolean(),
@@ -110,4 +113,24 @@ export function get_tires(): ResultAsync<Array<Tire>, string> {
   )
     .map(map_docs_to_raw)
     .andThen((data) => zod_parser(z.array(tire_schema), data));
+}
+
+const tracks_schema = z.object({
+  name: z.string(),
+  difficulty: z.string(),
+  distance: z.string(),
+  comment: z.string(),
+  segments: z.array(geopoint_schema),
+});
+
+export type Tracks = z.infer<typeof tracks_schema>;
+
+const TRACKS_COLLECTION_NAME = "tires";
+export function get_tracks(): ResultAsync<Array<Tracks>, string> {
+  return ResultAsync.fromPromise(
+    getDocs(collection(db, TRACKS_COLLECTION_NAME)),
+    (error) => `Firestore error: ${String(error)}`,
+  )
+    .map(map_docs_to_raw)
+    .andThen((data) => zod_parser(z.array(tracks_schema), data));
 }
