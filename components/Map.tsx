@@ -6,11 +6,10 @@ import {
   Marker,
   Polyline,
   useMap,
-  ZoomControl,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 type Marker<T> = { name: string; location: [number, number]; data: T };
 
@@ -32,22 +31,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
-
-function ChangeView({
-  center,
-  zoom,
-}: {
-  center: [number, number];
-  zoom: number;
-}) {
-  const map = useMap();
-
-  useEffect(() => {
-    map.flyTo(center, zoom);
-  }, [center, zoom, map]);
-
-  return null;
-}
 
 const createPinIcon = (color = "#27509b") =>
   L.divIcon({
@@ -98,10 +81,14 @@ function MapController({
       map.flyTo(center);
     } else if (bound_type === "markers" && markers.length > 0) {
       if (markers.length === 1) {
-        map.flyTo(markers[0].location, 15);
+        map.flyTo(markers[0].location, 15, {
+          duration: 1.4,
+        });
       } else {
-        map.fitBounds(L.latLngBounds(markers.map((m) => m.location)), {
+        map.flyToBounds(L.latLngBounds(markers.map((m) => m.location)), {
           padding: [40, 40],
+          animate: true,
+          duration: 0.8,
         });
       }
     } else if (bound_type === "segments" && segments.length > 0) {
