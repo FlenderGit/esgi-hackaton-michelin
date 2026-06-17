@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import type { WizardAnswers } from "@/app/configurateur/data";
 import { getWizardResults, getBrand } from "@/app/configurateur/data";
@@ -256,7 +257,7 @@ export default function Step6Results({ answers, onRefine }: Step6ResultsProps) {
                   </div>
                 </div>
 
-                <div className="px-5 pb-5 pt-2 bg-q-card/20">
+                <div className="px-5 pb-5 pt-2 bg-q-card/20 space-y-2">
                   <button
                     onClick={() => setExpanded(isExpanded ? null : tire.id)}
                     className="w-full py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer border"
@@ -272,6 +273,28 @@ export default function Step6Results({ answers, onRefine }: Step6ResultsProps) {
                   >
                     {isExpanded ? "Masquer" : "Détails"}
                   </button>
+
+                  {isTop && (
+                    <Link
+                      href="/nos-partenaires?id_supplier=F002"
+                      className="block w-full py-2.5 rounded-xl text-sm font-extrabold text-center transition-all bg-q-yellow text-black hover:brightness-105 cursor-pointer"
+                    >
+                      Acheter ce pneu
+                    </Link>
+                  )}
+
+                  {!isTop && (
+                    <Link
+                      href="/nos-partenaires?id_supplier=F002"
+                      className="block w-full py-2 rounded-xl text-xs font-bold text-center transition-all border hover:bg-white/5 cursor-pointer"
+                      style={{
+                        color: brand.accent,
+                        borderColor: brand.accent + "40",
+                      }}
+                    >
+                      Acheter chez nos partenaires
+                    </Link>
+                  )}
                 </div>
 
                 <AnimatePresence>
@@ -428,7 +451,36 @@ export default function Step6Results({ answers, onRefine }: Step6ResultsProps) {
         </div>
       </motion.div>
 
-      <div className="pt-4 flex flex-col items-center gap-3">
+      <div className="pt-6 flex flex-col items-center gap-4">
+        {/* CTA principal : acheter le pneu recommandé */}
+        <div className="flex flex-col items-center gap-1.5">
+          <Link
+            href="/nos-partenaires?id_supplier=F002"
+            className="group inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-q-yellow text-black font-extrabold text-lg tracking-[-0.2px] transition-all hover:brightness-105 active:scale-[0.985] shadow-[0_4px_20px_rgba(252,229,0,0.35)] cursor-pointer"
+          >
+            Acheter ce pneu
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </Link>
+          {topResults[0] && (
+            <p className="text-xs text-q-text-dim/60">
+              {getBrand(topResults[0].brandId).name} {topResults[0].model}
+            </p>
+          )}
+        </div>
+
         <button
           onClick={onRefine}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition cursor-pointer border-2 border-q-border/50 text-q-text-muted hover:border-q-yellow/40 hover:text-q-text"
