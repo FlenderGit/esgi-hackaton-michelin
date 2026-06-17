@@ -157,7 +157,7 @@ function PartenairesContent() {
             bound_type="markers"
             onClick={(data) => {
               console.log(data);
-              setSelectedSupplier(data);
+              setSelectedSupplier(data as any);
             }}
           />
         </div>
