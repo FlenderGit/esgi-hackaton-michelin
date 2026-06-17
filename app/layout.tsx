@@ -27,6 +27,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${notoSans.variable} h-full antialiased`}>
+      <head>
+        {/* Apply saved theme before first paint to prevent flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(localStorage.getItem('q-theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import ThemeToggle from "@/components/shared/ThemeToggle";
+
 const navLinks = [
   { label: "La légende", href: "/legende" },
   { label: "Nos champions", href: "/champions" },
@@ -39,7 +41,7 @@ export default function Navbar() {
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className={`group relative text-sm font-medium ${isActive ? "text-secondary" : "text-white"}`}
+                  className={`group relative text-sm font-medium transition-colors ${isActive ? "text-secondary" : "text-q-text"}`}
                 >
                   {link.label}
                   <span
@@ -51,7 +53,14 @@ export default function Navbar() {
           })}
         </ul>
 
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
+          <Link
+            href="/questionnaire"
+            className="inline-flex items-center justify-center rounded-full border border-secondary/60 px-6 py-3 text-sm font-bold text-secondary transition-all hover:bg-secondary/10"
+          >
+            Ma cyclo-personnalité
+          </Link>
           <Link
             href="/configurateur"
             className="inline-flex items-center justify-center rounded-full bg-secondary px-6 py-3 text-sm font-bold text-neutral transition-opacity hover:opacity-90"
@@ -66,17 +75,17 @@ export default function Navbar() {
           aria-label="Menu"
         >
           <span
-            className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${
               menuOpen ? "translate-y-2 rotate-45" : ""
             }`}
           />
           <span
-            className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${
               menuOpen ? "opacity-0" : ""
             }`}
           />
           <span
-            className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${
               menuOpen ? "-translate-y-2 -rotate-45" : ""
             }`}
           />
@@ -86,26 +95,37 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-neutral/95 backdrop-blur-md md:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-q-bg/95 backdrop-blur-md md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
+            <div className="absolute top-4 right-6">
+              <ThemeToggle />
+            </div>
+
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="text-2xl font-bold text-white"
+                className="text-2xl font-bold text-q-text"
               >
                 {link.label}
               </Link>
             ))}
             <Link
+              href="/questionnaire"
+              onClick={() => setMenuOpen(false)}
+              className="inline-flex items-center justify-center rounded-full border border-secondary/60 px-6 py-3 text-sm font-bold text-secondary"
+            >
+              Ma cyclo-personnalité
+            </Link>
+            <Link
               href="/configurateur"
               onClick={() => setMenuOpen(false)}
-              className="mt-4 inline-flex items-center justify-center rounded-full bg-secondary px-6 py-3 text-sm font-bold text-neutral"
+              className="inline-flex items-center justify-center rounded-full bg-secondary px-6 py-3 text-sm font-bold text-neutral"
             >
               Trouver mon pneu
             </Link>

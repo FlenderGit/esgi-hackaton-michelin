@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import ConfigNav from "@/components/configurateur/ConfigNav";
+import Navbar from "@/components/landing/Navbar";
 
 const FEATURES = [
   {
@@ -26,7 +26,7 @@ const FEATURES = [
 export default function IntroClient() {
   return (
     <div className="min-h-screen bg-q-bg text-q-text">
-      <ConfigNav backHref="/" backLabel="Accueil" />
+      <Navbar />
 
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0">

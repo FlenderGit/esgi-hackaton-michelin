@@ -32,7 +32,7 @@ import {
 } from "@/components/configurateur/StepAdvanced";
 import Step6Results from "@/components/configurateur/Step6Results";
 import CyclistProgressBar from "@/components/configurateur/CyclistProgressBar";
-import ConfigNav from "@/components/configurateur/ConfigNav";
+import Navbar from "@/components/landing/Navbar";
 import StepSidebar from "@/components/configurateur/StepSidebar";
 
 const EMPTY_ANSWERS: WizardAnswers = {
@@ -58,38 +58,41 @@ function canGoNext(step: number, a: WizardAnswers): boolean {
 
 type Phase = "form" | "results";
 
+function readSaved() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw) as { answers?: WizardAnswers; step?: number };
+  } catch { /* ignore */ }
+  return null;
+}
+
 export default function QuestionnaireClient() {
-  const [step, setStep] = useState(1);
-  const [answers, setAnswers] = useState<WizardAnswers>(EMPTY_ANSWERS);
+  const [step, setStep] = useState<number>(() => {
+    const saved = readSaved();
+    return saved?.step ? Math.min(Math.max(saved.step, 1), TOTAL_STEPS) : 1;
+  });
+  const [answers, setAnswers] = useState<WizardAnswers>(() => {
+    const saved = readSaved();
+    return saved?.answers ? { ...EMPTY_ANSWERS, ...saved.answers } : EMPTY_ANSWERS;
+  });
   const [direction, setDirection] = useState(1);
   const [phase, setPhase] = useState<Phase>("form");
-  const hydrated = useRef(false);
   const autoAdvance = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Restauration depuis localStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved) as {
-          answers?: WizardAnswers;
-          step?: number;
-        };
-        if (parsed.answers) setAnswers({ ...EMPTY_ANSWERS, ...parsed.answers });
-        if (parsed.step)
-          setStep(Math.min(Math.max(parsed.step, 1), TOTAL_STEPS));
-      }
-    } catch {
-      /* ignore */
-    }
-    hydrated.current = true;
-  }, []);
 
   // Sauvegarde
   useEffect(() => {
-    if (!hydrated.current) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, step }));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, step }));
+    } catch { /* ignore */ }
   }, [answers, step]);
+
+  // Scroll en haut à l'arrivée sur les résultats
+  useEffect(() => {
+    if (phase === "results") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [phase]);
 
   const update = useCallback((patch: Partial<WizardAnswers>) => {
     setAnswers((prev) => ({ ...prev, ...patch }));
@@ -237,7 +240,7 @@ export default function QuestionnaireClient() {
 
   return (
     <div className="min-h-screen bg-q-bg text-q-text">
-      <ConfigNav backHref="/configurateur" backLabel="Retour" />
+      <Navbar />
 
       <div className="flex pt-[68px]">
         {/* Sidebar verticale (desktop) */}
@@ -301,16 +304,6 @@ export default function QuestionnaireClient() {
               <FontAwesomeIcon icon={faArrowLeft} className="w-3.5 h-3.5" />
               Précédent
             </button>
-
-            <span className="hidden sm:block text-xs text-q-text-dim">
-              Utilise{" "}
-              <kbd className="px-1.5 py-0.5 rounded bg-q-card/60 border border-q-border/30">
-                ←
-              </kbd>{" "}
-              <kbd className="px-1.5 py-0.5 rounded bg-q-card/60 border border-q-border/30">
-                →
-              </kbd>
-            </span>
 
             <button
               onClick={goNext}
