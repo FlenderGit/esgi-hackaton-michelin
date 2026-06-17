@@ -1,11 +1,10 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  DATABASE_URL: z.url().default("no-url"),
+  DATABASE_URL: z.url(),
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
-  FIRESTORE_API_KEY: z.string().default("no-key"),
 });
 
 const parsed = envSchema.safeParse(process.env);
