@@ -21,35 +21,35 @@ const milestones: Milestone[] = [
     title: "Le pneu démontable",
     description:
       "Charles et André Michelin inventent le pneu démontable pour bicyclette. Une révolution qui marque la naissance de l'industrie moderne du pneumatique.",
-    image: "/images/timeline/1891.svg",
+    image: "/images/legende/1891.jpg",
   },
   {
     year: "1946",
     title: "Le pneu radial",
     description:
       "Michelin invente le pneu radial, une avancée technologique majeure qui transforme l'industrie mondiale et offre une adhérence et une longévité inédites.",
-    image: "/images/timeline/1946.svg",
+    image: "/images/legende/1946.jpg",
   },
   {
     year: "1952",
     title: "Radial poids lourds",
     description:
       "La technologie radiale s'étend au transport routier, transformant le secteur du poids lourd et réduisant durablement la consommation de carburant.",
-    image: "/images/timeline/1952.svg",
+    image: "/images/legende/1952.jpg",
   },
   {
     year: "1978",
     title: "Radial agricole",
     description:
       "Michelin révolutionne l'agriculture mécanisée : meilleure traction, réduction du tassement des sols et respect des cultures.",
-    image: "/images/timeline/1978.jpg",
+    image: "/images/legende/1978.jpg",
   },
   {
     year: "2017",
     title: "Vision Concept",
     description:
       "Un pneu connecté, rechargeable, imprimé en 3D et 100% durable. Avec Vision, le futur de la mobilité prend forme.",
-    image: "/images/timeline/2017.jpg",
+    image: "/images/legende/2017.jpg",
   },
 ];
 
@@ -61,11 +61,7 @@ function Chapter({ m, index }: { m: Milestone; index: number }) {
   });
 
   const imageY = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
-  const imageScale = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [1.25, 1.1, 1.2],
-  );
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.25, 1.1, 1.2]);
   const yearX = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
   const textY = useTransform(scrollYProgress, [0, 1], ["40%", "-20%"]);
 
@@ -74,16 +70,17 @@ function Chapter({ m, index }: { m: Milestone; index: number }) {
       ref={ref}
       className="relative flex min-h-screen items-center overflow-hidden"
     >
+      {/* Fond parallaxe — img natif, pas de -z-10 */}
       <motion.div
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0"
         style={{ y: imageY, scale: imageScale }}
       >
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={m.image}
-          alt={m.title}
-          fill
-          className="object-cover"
-          sizes="100vw"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          loading={index === 0 ? "eager" : "lazy"}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-q-bg via-q-bg/70 to-q-bg/20" />
         <div className="absolute inset-0 bg-gradient-to-t from-q-bg via-transparent to-q-bg/40" />
@@ -182,10 +179,20 @@ export default function LegendeClient() {
         ref={heroRef}
         className="relative flex h-screen items-center overflow-hidden"
       >
+        {/* Fond hero — image statique + vidéo par dessus quand disponible, pas de -z-10 */}
         <motion.div
-          className="absolute inset-0 -z-10"
+          className="absolute inset-0"
           style={{ y: heroImageY, scale: heroImageScale }}
         >
+          {/* Image de fallback toujours visible */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/background.jpg"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="eager"
+          />
+          {/* Vidéo par dessus — cache l'image quand elle joue */}
           <video
             src="/videos/background_2.mp4"
             autoPlay
@@ -193,7 +200,6 @@ export default function LegendeClient() {
             loop
             playsInline
             preload="auto"
-            poster="/images/background.jpg"
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-q-bg via-q-bg/20 to-q-bg/30" />
@@ -201,7 +207,7 @@ export default function LegendeClient() {
         </motion.div>
 
         <motion.div
-          className="mx-auto w-full max-w-6xl px-6 md:px-8"
+          className="relative mx-auto w-full max-w-6xl px-6 md:px-8"
           style={{ y: heroContentY, opacity: heroOpacity }}
         >
           <motion.span
@@ -286,9 +292,9 @@ export default function LegendeClient() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA final */}
       <section className="relative overflow-hidden border-t border-white/10 py-32">
-        <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0">
           <Image
             src="/images/background-noschampions.jpg"
             alt=""
@@ -298,7 +304,7 @@ export default function LegendeClient() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-q-bg via-q-bg/80 to-q-bg" />
         </div>
-        <Reveal className="mx-auto max-w-3xl px-6 text-center">
+        <Reveal className="relative mx-auto max-w-3xl px-6 text-center">
           <h2 className="text-3xl font-black md:text-5xl">
             Roulez avec la <span className="text-secondary">légende</span>
           </h2>
