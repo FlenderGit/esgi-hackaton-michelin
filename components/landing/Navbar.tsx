@@ -3,30 +3,25 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import Button from "./Button";
-import { useFullpage } from "./FullpageWrapper";
-
+import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 const navLinks = [
-  { label: "La légende", section: 1 },
-  { label: "Nos champions", section: 2 },
-  { label: "Innovations", section: 3 },
-  { label: "Contact", section: 4 },
+  { label: "La légende", href: "/legende" },
+  { label: "Nos champions", href: "/champions" },
+  { label: "Innovations", href: "/innovations" },
 ];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { goTo } = useFullpage();
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   return (
     <>
-      <motion.nav
-        className="fixed top-0 left-0 z-50 flex w-full items-center justify-between px-6 py-4 md:px-8 md:py-6 lg:px-16"
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
+      <nav
+        className={`fixed top-0 left-0 z-50 flex w-full items-center justify-between px-6 py-4 md:px-8 md:py-6 lg:px-16 ${isHome ? "bg-transparent" : "bg-[var(--color-q-bg)]"}`}
       >
-        <Link href="/" onClick={() => goTo(0)}>
+        <Link href="/">
           <Image
             src="/images/logo.png"
             alt="Michelin"
@@ -38,17 +33,22 @@ export default function Navbar() {
         </Link>
 
         <ul className="hidden items-center gap-10 md:flex">
-          {navLinks.map((link) => (
-            <li key={link.label}>
-              <button
-                onClick={() => goTo(link.section)}
-                className="group relative text-sm font-medium text-white"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-secondary transition-all duration-300 group-hover:w-full" />
-              </button>
-            </li>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className={`group relative text-sm font-medium ${isActive ? "text-secondary" : "text-white"}`}
+                >
+                  {link.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-secondary transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+                  />
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="hidden md:block">
@@ -66,19 +66,22 @@ export default function Navbar() {
           aria-label="Menu"
         >
           <span
-            className={`h-0.5 w-6 bg-white transition-all duration-300 ${menuOpen ? "translate-y-2 rotate-45" : ""
-              }`}
+            className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+              menuOpen ? "translate-y-2 rotate-45" : ""
+            }`}
           />
           <span
-            className={`h-0.5 w-6 bg-white transition-all duration-300 ${menuOpen ? "opacity-0" : ""
-              }`}
+            className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+              menuOpen ? "opacity-0" : ""
+            }`}
           />
           <span
-            className={`h-0.5 w-6 bg-white transition-all duration-300 ${menuOpen ? "-translate-y-2 -rotate-45" : ""
-              }`}
+            className={`h-0.5 w-6 bg-white transition-all duration-300 ${
+              menuOpen ? "-translate-y-2 -rotate-45" : ""
+            }`}
           />
         </button>
-      </motion.nav>
+      </nav>
 
       <AnimatePresence>
         {menuOpen && (
@@ -90,16 +93,14 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
           >
             {navLinks.map((link) => (
-              <button
+              <Link
                 key={link.label}
-                onClick={() => {
-                  goTo(link.section);
-                  setMenuOpen(false);
-                }}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
                 className="text-2xl font-bold text-white"
               >
                 {link.label}
-              </button>
+              </Link>
             ))}
             <Link
               href="/configurateur"
