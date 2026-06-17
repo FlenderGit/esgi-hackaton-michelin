@@ -43,20 +43,25 @@
 
 [data-theme="light"] {
   --color-q-bg:           #F2F2F2;
-  --color-q-card:         #FFFFFF;
-  --color-q-card-hover:   #E5E5E5;
+  --color-q-card:         #E8EDF5;
+  --color-q-card-hover:   #DAE3F0;
 
-  --color-q-border:       #AEC5E5;
-  --color-q-border-sub:   #C1D6EF;
-  --color-q-border-track: #D4E7FA;
+  --color-q-border:       #7A9DCE;
+  --color-q-border-sub:   #AEC5E5;
+  --color-q-border-track: #C1D6EF;
 
-  --color-q-text:         #000000;
-  --color-q-text-sub:     #27509B;
-  --color-q-text-muted:   #666666;
-  --color-q-text-dim:     #999999;
-  --color-q-text-hover:   #0D0D0D;
+  --color-q-text:         #0A0A0A;
+  --color-q-text-sub:     #1E3A6E;
+  --color-q-text-muted:   #3D5A8A;
+  --color-q-text-dim:     #5A7BB0;
+  --color-q-text-hover:   #000C34;
 
   --color-q-yellow:       #FCE500;
+
+  /* En thème clair, le jaune est illisible comme couleur de texte/bordure.
+     On utilise le bleu Michelin comme accent — same brand, better contrast. */
+  --color-secondary:      #27509B;
+  --color-neutral:        #FFFFFF;
 }
 
 /* ── Base ───────────────────────────────────────────────────── */
