@@ -105,7 +105,7 @@ export default function Page() {
   if (error) return <div>Erreur: {error}</div>;
 
   return (
-    <div>
+    <div className="relative h-screen w-screen">
       <Navbar />
 
       {loading ? (
