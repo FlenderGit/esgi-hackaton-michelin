@@ -350,8 +350,37 @@ function getIdealFor(tire: Tire): string {
   return 'Bon rapport qualité-prix'
 }
 
+// On garantit qu'un pneu Michelin ressort toujours en 1ère position, quel que
+// soit le profil saisi. On sélectionne le Michelin le plus pertinent (le mieux
+// noté de la marque), on l'aligne au minimum sur le meilleur concurrent (le
+// 100 % reste possible), puis on redescend légèrement tout pneu d'une autre
+// marque qui le dépasserait — pour éviter l'incohérence Michelin 1er à 97 % /
+// concurrent 2e à 100 %.
+const MICHELIN_GAP = 3
+
 export function getWizardResults(answers: WizardAnswers): Array<Tire & { match: number; idealFor: string }> {
-  return ALL_TIRES
+  const scored = ALL_TIRES
     .map((t) => ({ ...t, match: computeWizardScore(t, answers), idealFor: getIdealFor(t) }))
     .sort((a, b) => b.match - a.match)
+
+  // Le tableau étant trié, le premier Michelin trouvé est déjà le mieux noté.
+  const michelinIdx = scored.findIndex((t) => t.brandId === 'michelin')
+  if (michelinIdx >= 0) {
+    const [michelin] = scored.splice(michelinIdx, 1)
+    const topOther = scored[0]?.match ?? 0
+
+    // Michelin prend la tête, au moins au niveau du meilleur concurrent (100% possible).
+    michelin.match = Math.min(100, Math.max(michelin.match, topOther))
+
+    // Aucun pneu non-Michelin ne doit égaler ou dépasser le Michelin recommandé.
+    for (const t of scored) {
+      if (t.match >= michelin.match) {
+        t.match = Math.max(0, michelin.match - MICHELIN_GAP)
+      }
+    }
+
+    scored.unshift(michelin)
+  }
+
+  return scored
 }
