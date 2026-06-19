@@ -14,7 +14,7 @@ const notoSans = Noto_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Michelin Velo — Profil & Configurateur",
+  title: "Michelin Velo  Profil & Configurateur",
   description:
     "Découvrez votre profil cycliste et configurez les pneus adaptés à votre pratique.",
   icons: { icon: "/favicon.ico" },
@@ -27,13 +27,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${notoSans.variable} h-full antialiased`}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(localStorage.getItem('q-theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}})()`,
-          }}
-        />
-      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

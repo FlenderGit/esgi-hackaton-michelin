@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/landing/Navbar";
 import QuizIntro from "@/components/questionnaire/QuizIntro";
 import QuizQuestion from "@/components/questionnaire/QuizQuestion";
@@ -28,9 +28,10 @@ export default function QuestionnaireClient() {
   const [resultId, setResultId] = useState<ProfileId | null>(null);
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const activeQuestions = mode === "quick"
-    ? ALL_QUESTIONS.filter((q) => QUICK_MODE_QUESTION_IDS.includes(q.id))
-    : ALL_QUESTIONS;
+  const activeQuestions =
+    mode === "quick"
+      ? ALL_QUESTIONS.filter((q) => QUICK_MODE_QUESTION_IDS.includes(q.id))
+      : ALL_QUESTIONS;
 
   const currentQuestion = activeQuestions[currentIndex];
 
@@ -48,23 +49,22 @@ export default function QuestionnaireClient() {
     setPhase("quiz");
   }
 
-  const goNext = useCallback(() => {
-    if (currentIndex < activeQuestions.length - 1) {
-      setDirection(1);
-      setCurrentIndex((i) => i + 1);
-    } else {
-      const result = calculateResult(answers);
-      setResultId(result);
-      setPhase("result");
-    }
-  }, [currentIndex, activeQuestions.length, answers]);
-
   function handleSelect(key: AnswerKey) {
-    const questionId = currentQuestion.id;
-    setAnswers((prev) => ({ ...prev, [questionId]: key }));
+    const nextAnswers = { ...answers, [currentQuestion.id]: key };
+    setAnswers(nextAnswers);
+
+    const isLast = currentIndex >= activeQuestions.length - 1;
 
     if (advanceTimer.current) clearTimeout(advanceTimer.current);
-    advanceTimer.current = setTimeout(() => goNext(), ADVANCE_DELAY_MS);
+    advanceTimer.current = setTimeout(() => {
+      if (isLast) {
+        setResultId(calculateResult(nextAnswers));
+        setPhase("result");
+      } else {
+        setDirection(1);
+        setCurrentIndex((i) => i + 1);
+      }
+    }, ADVANCE_DELAY_MS);
   }
 
   function handleBack() {

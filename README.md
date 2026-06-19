@@ -36,9 +36,9 @@
 
 **Michelin Vélo** is a premium e-commerce platform developed during the **ESGI Hackathon**, designed to relaunch and energize Michelin's cycling division. Built for discerning cyclists, the platform blends heritage, expertise, and smart tooling to reconnect customers with the Michelin Vélo brand.
 
-- **Heritage & Expertise** — Discover Michelin's storied history and technical mastery in cycling, from pioneering rubber innovations to modern tire technology.
-- **Smart Tire Finder** — Find the perfect tire for your needs, whether road racing, gravel, urban commuting, or mountain trails.
-- **Interactive Reseller Map** — Locate nearby authorized Michelin Vélo dealers with an interactive map.
+- **Heritage & Expertise**  Discover Michelin's storied history and technical mastery in cycling, from pioneering rubber innovations to modern tire technology.
+- **Smart Tire Finder**  Find the perfect tire for your needs, whether road racing, gravel, urban commuting, or mountain trails.
+- **Interactive Reseller Map**  Locate nearby authorized Michelin Vélo dealers with an interactive map.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -47,9 +47,9 @@
 The platform serves as a commercial website to showcase and sell Michelin Velo bikes. Customers can browse the catalog, view product details, and engage with the brand through an optimized user experience.
 
 Key features:
-- **Product Catalog** — Browse and filter Michelin Velo bike models
-- **Responsive Design** — Optimized for desktop and mobile devices
-- **Edge Performance** — Deployed on Cloudflare Pages for global low-latency access and Docker image availible
+- **Product Catalog**  Browse and filter Michelin Velo bike models
+- **Responsive Design**  Optimized for desktop and mobile devices
+- **Edge Performance**  Deployed on Cloudflare Pages for global low-latency access and Docker image availible
 
 _For more examples and detailed API documentation, please refer to the [Documentation](https://example.com)_
 
@@ -132,7 +132,7 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
 
 ## Acknowledgments
 
-* [ESGI](https://www.esgi.fr/) — For organizing the hackathon
+* [ESGI](https://www.esgi.fr/)  For organizing the hackathon
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

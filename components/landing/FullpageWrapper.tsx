@@ -46,25 +46,42 @@ export default function FullpageWrapper({
       setActiveSection(index);
       setTimeout(() => {
         cooldown.current = false;
-      }, 1000);
+      }, 550);
     },
     [totalSections, activeSection],
   );
 
   useEffect(() => {
+    // Verrou par geste : un swipe trackpad émet une rafale d'événements
+    // (inertie). On réarme `releaseTimer` à chaque événement, donc le verrou
+    // ne se relâche qu'après ~80 ms sans molette → un seul saut par geste.
+    let locked = false;
+    let releaseTimer: ReturnType<typeof setTimeout>;
+
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      if (cooldown.current) return;
 
+      clearTimeout(releaseTimer);
+      releaseTimer = setTimeout(() => {
+        locked = false;
+      }, 80);
+
+      if (locked || cooldown.current) return;
+      if (Math.abs(e.deltaY) < 10) return;
+
+      locked = true;
       if (e.deltaY > 0) {
         goTo(activeSection + 1);
-      } else if (e.deltaY < 0) {
+      } else {
         goTo(activeSection - 1);
       }
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
-    return () => window.removeEventListener("wheel", handleWheel);
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      clearTimeout(releaseTimer);
+    };
   }, [activeSection, goTo]);
 
   useEffect(() => {
@@ -138,7 +155,7 @@ export default function FullpageWrapper({
             animate="center"
             exit="exit"
             transition={{
-              duration: 1,
+              duration: 0.5,
               ease: [0.22, 1, 0.36, 1],
             }}
             className="absolute inset-0"
