@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import ThemeToggle from "@/components/shared/ThemeToggle";
 
 const navLinks = [
   { label: "La légende", href: "/legende" },
@@ -56,7 +55,6 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden md:flex items-center gap-3">
-          <ThemeToggle />
           <Link
             href="/questionnaire"
             className="inline-flex items-center justify-center rounded-full border border-secondary/60 px-6 py-3 text-sm font-bold text-secondary transition-all hover:bg-secondary/10"
@@ -77,19 +75,16 @@ export default function Navbar() {
           aria-label="Menu"
         >
           <span
-            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${
-              menuOpen ? "translate-y-2 rotate-45" : ""
-            }`}
+            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${menuOpen ? "translate-y-2 rotate-45" : ""
+              }`}
           />
           <span
-            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${
-              menuOpen ? "opacity-0" : ""
-            }`}
+            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${menuOpen ? "opacity-0" : ""
+              }`}
           />
           <span
-            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${
-              menuOpen ? "-translate-y-2 -rotate-45" : ""
-            }`}
+            className={`h-0.5 w-6 bg-q-text transition-all duration-300 ${menuOpen ? "-translate-y-2 -rotate-45" : ""
+              }`}
           />
         </button>
       </nav>
@@ -103,10 +98,6 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="absolute top-4 right-6">
-              <ThemeToggle />
-            </div>
-
             {navLinks.map((link) => (
               <Link
                 key={link.label}

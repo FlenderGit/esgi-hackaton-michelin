@@ -180,7 +180,7 @@ export interface WizardAnswers {
 export const RIDER_PROFILES: { id: RiderProfile; label: string; desc: string }[] = [
   { id: 'grand_rouleur', label: 'Grand rouleur', desc: 'Beaucoup de kilomètres, longues sorties' },
   { id: 'reprise_vtt', label: 'Reprise du VTT', desc: "Je m'y remets après une pause" },
-  { id: 'debutant', label: 'Débutant', desc: 'Je découvre — guide-moi' },
+  { id: 'debutant', label: 'Débutant', desc: 'Je découvre  guide-moi' },
   { id: 'competiteur', label: 'Compétiteur', desc: 'Je cherche la performance' },
   { id: 'balades', label: 'Balades & loisir', desc: 'Sorties tranquilles le week-end' },
   { id: 'velotaf', label: 'Vélotaf / ville', desc: 'Trajets quotidiens, fiabilité' },

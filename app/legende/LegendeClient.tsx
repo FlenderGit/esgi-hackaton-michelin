@@ -74,7 +74,7 @@ function Chapter({ m, index }: { m: Milestone; index: number }) {
       ref={ref}
       className="relative flex min-h-screen items-center overflow-hidden"
     >
-      {/* Fond parallaxe — img natif, pas de -z-10 */}
+      {/* Fond parallaxe  img natif, pas de -z-10 */}
       <motion.div
         className="absolute inset-0"
         style={{ y: imageY, scale: imageScale }}
@@ -111,7 +111,7 @@ function Chapter({ m, index }: { m: Milestone; index: number }) {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <span className="text-sm font-bold uppercase tracking-[0.4em] text-secondary">
-            {String(index + 1).padStart(2, "0")} — Chapitre
+            {String(index + 1).padStart(2, "0")}  Chapitre
           </span>
           <h2 className="mt-4 bg-linear-to-br from-white to-white/60 bg-clip-text text-7xl font-black leading-none text-transparent md:text-9xl">
             {m.year}
@@ -183,7 +183,7 @@ export default function LegendeClient() {
         ref={heroRef}
         className="relative flex h-screen items-center overflow-hidden"
       >
-        {/* Fond hero — image statique + vidéo par dessus quand disponible, pas de -z-10 */}
+        {/* Fond hero  image statique + vidéo par dessus quand disponible, pas de -z-10 */}
         <motion.div
           className="absolute inset-0"
           style={{ y: heroImageY, scale: heroImageScale }}
@@ -196,7 +196,7 @@ export default function LegendeClient() {
             className="absolute inset-0 h-full w-full object-cover"
             loading="eager"
           />
-          {/* Vidéo par dessus — cache l'image quand elle joue */}
+          {/* Vidéo par dessus  cache l'image quand elle joue */}
           <video
             src="/videos/background_2.mp4"
             autoPlay
@@ -289,7 +289,7 @@ export default function LegendeClient() {
               <span className="text-secondary">votre univers</span>
             </h2>
             <p className="mx-auto mt-8 max-w-2xl text-lg text-white/60">
-              Route, gravel, VTT ou trajets quotidiens — il existe un pneu
+              Route, gravel, VTT ou trajets quotidiens  il existe un pneu
               Michelin conçu pour repousser vos limites.
             </p>
           </Reveal>

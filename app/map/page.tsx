@@ -129,11 +129,11 @@ export default function Page() {
               segments={segments}
               segmentColor={selectedColor}
               bound_type={segments.length > 0 ? "segments" : "center"}
-              onclick={() => {}}
+              onclick={() => { }}
             />
           </section>
 
-          {/* Actions « Ouvrir sur » — sous la carte */}
+          {/* Actions « Ouvrir sur »  sous la carte */}
           <div className="flex flex-none flex-wrap items-center gap-3 rounded-2xl border border-q-border bg-q-card/40 px-4 py-3">
             <span className="text-sm font-medium text-q-text-sub">
               Ouvrir sur
@@ -148,7 +148,7 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Liste des trajets — bloc droit (30%) */}
+        {/* Liste des trajets  bloc droit (30%) */}
         <aside className="flex min-h-0 w-[30%] flex-col overflow-hidden rounded-2xl border border-q-border bg-q-card/40 shadow-2xl">
           <div className="flex-none border-b border-q-border-sub p-5">
             <h2 className="text-lg font-bold text-white">Trajets</h2>
@@ -216,11 +216,10 @@ export default function Page() {
                 <button
                   key={`${track.name}-${index}`}
                   onClick={() => selectTrack(index)}
-                  className={`w-full rounded-xl border p-4 text-left transition-all ${
-                    active
+                  className={`w-full rounded-xl border p-4 text-left transition-all ${active
                       ? "border-secondary bg-q-card-hover"
                       : "border-q-border-sub bg-q-card hover:border-q-border hover:bg-q-card-hover"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <h3 className="font-bold text-white">{track.name}</h3>

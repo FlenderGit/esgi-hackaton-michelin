@@ -20,7 +20,7 @@ export default function QuizIntro({ onStart }: QuizIntroProps) {
           className="object-cover"
           sizes="100vw"
         />
-        {/* Dark overlay — intentionally hardcoded so the text stays lisible en mode clair */}
+        {/* Dark overlay  intentionally hardcoded so the text stays lisible en mode clair */}
         <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/40" />
         <div className="absolute inset-0 bg-linear-to-r from-black/70 to-transparent" />
       </div>
@@ -44,7 +44,7 @@ export default function QuizIntro({ onStart }: QuizIntroProps) {
 
           <p className="text-lg text-white/70 leading-relaxed max-w-lg">
             20 questions pour découvrir quel cycliste tu es vraiment. Sois
-            honnête — ou pas, on jugera quand même.
+            honnête  ou pas, on jugera quand même.
           </p>
         </motion.div>
 

@@ -19,11 +19,10 @@ function OptionCard({
     <button
       onClick={onClick}
       aria-pressed={selected}
-      className={`relative w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border-2 ${
-        selected
+      className={`relative w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200 cursor-pointer border-2 ${selected
           ? "border-q-yellow bg-q-yellow/8 shadow-[0_0_20px_rgba(252,229,0,0.06)]"
           : "border-q-border/40 hover:border-q-border/70 hover:bg-q-card/30"
-      }`}
+        }`}
     >
       {recommended && !selected && (
         <span className="absolute -top-2.5 right-3 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-q-yellow/15 text-q-yellow border border-q-yellow/20">
@@ -31,11 +30,10 @@ function OptionCard({
         </span>
       )}
       <span
-        className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-          selected
+        className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all ${selected
             ? "bg-q-yellow/15 text-q-yellow"
             : "bg-q-border/15 text-q-text-dim"
-        }`}
+          }`}
       >
         {icon}
       </span>
@@ -52,9 +50,8 @@ function OptionCard({
         )}
       </div>
       <span
-        className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-          selected ? "border-q-yellow bg-q-yellow" : "border-q-border/50"
-        }`}
+        className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selected ? "border-q-yellow bg-q-yellow" : "border-q-border/50"
+          }`}
       >
         {selected && (
           <svg viewBox="0 0 12 12" fill="none" width="8" height="8">
@@ -87,13 +84,11 @@ function BudgetChip({
     <button
       onClick={onClick}
       aria-pressed={selected}
-      className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer border-2 ${
-        wide ? "col-span-2" : ""
-      } ${
-        selected
+      className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer border-2 ${wide ? "col-span-2" : ""
+        } ${selected
           ? "border-q-yellow bg-q-yellow/10 text-q-yellow"
           : "border-q-border/40 text-q-text-sub hover:border-q-border/70"
-      }`}
+        }`}
     >
       {label}
     </button>
@@ -129,61 +124,61 @@ const MOUNTING_OPTIONS: {
   recommended?: boolean;
   icon: React.ReactNode;
 }[] = [
-  {
-    id: "tubeless_ready",
-    label: "Tubeless Ready",
-    sub: "Moins de crevaisons, meilleur confort",
-    recommended: true,
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        width="20"
-        height="20"
-      >
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 3" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-  {
-    id: "chambre_air",
-    label: "Chambre à air",
-    sub: "Classique et simple à réparer",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        width="20"
-        height="20"
-      >
-        <circle cx="12" cy="12" r="9" />
-        <circle cx="12" cy="12" r="4" />
-      </svg>
-    ),
-  },
-  {
-    id: "les_deux",
-    label: "Pas de préférence",
-    sub: "On regarde tous les pneus",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        width="20"
-        height="20"
-      >
-        <path d="M4 12h16M12 4v16" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-];
+    {
+      id: "tubeless_ready",
+      label: "Tubeless Ready",
+      sub: "Moins de crevaisons, meilleur confort",
+      recommended: true,
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          width="20"
+          height="20"
+        >
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+    },
+    {
+      id: "chambre_air",
+      label: "Chambre à air",
+      sub: "Classique et simple à réparer",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          width="20"
+          height="20"
+        >
+          <circle cx="12" cy="12" r="9" />
+          <circle cx="12" cy="12" r="4" />
+        </svg>
+      ),
+    },
+    {
+      id: "les_deux",
+      label: "Pas de préférence",
+      sub: "On regarde tous les pneus",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          width="20"
+          height="20"
+        >
+          <path d="M4 12h16M12 4v16" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+  ];
 
 export function StepAdvMount({
   answers,
@@ -295,45 +290,45 @@ const AXLE_OPTIONS: {
   sub: string;
   icon: React.ReactNode;
 }[] = [
-  {
-    id: "meme_pneu",
-    label: "Même pneu avant & arrière",
-    sub: "Plus simple, une seule recommandation",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        width="20"
-        height="20"
-      >
-        <circle cx="7" cy="12" r="4" />
-        <circle cx="17" cy="12" r="4" />
-        <path d="M11 12h2" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    id: "differents",
-    label: "Pneus différents AV / AR",
-    sub: "Paire optimisée — plus de grip devant",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        width="20"
-        height="20"
-      >
-        <circle cx="7" cy="12" r="4" />
-        <circle cx="17" cy="12" r="4" strokeDasharray="3 2" />
-        <path d="M11 12h2" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-];
+    {
+      id: "meme_pneu",
+      label: "Même pneu avant & arrière",
+      sub: "Plus simple, une seule recommandation",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          width="20"
+          height="20"
+        >
+          <circle cx="7" cy="12" r="4" />
+          <circle cx="17" cy="12" r="4" />
+          <path d="M11 12h2" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+    {
+      id: "differents",
+      label: "Pneus différents AV / AR",
+      sub: "Paire optimisée  plus de grip devant",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          width="20"
+          height="20"
+        >
+          <circle cx="7" cy="12" r="4" />
+          <circle cx="17" cy="12" r="4" strokeDasharray="3 2" />
+          <path d="M11 12h2" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+  ];
 
 export function StepAdvAxle({
   answers,

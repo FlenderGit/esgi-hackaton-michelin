@@ -200,7 +200,7 @@ export default function QuestionnaireClient() {
                 Réglages avancés
               </h2>
               <p className="text-q-text-muted">
-                Optionnel — affine tes résultats.
+                Optionnel  affine tes résultats.
               </p>
             </div>
             <StepAdvMount
@@ -281,11 +281,10 @@ export default function QuestionnaireClient() {
             <button
               onClick={goBack}
               disabled={step === 1}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all cursor-pointer border-2 ${
-                step === 1
+              className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all cursor-pointer border-2 ${step === 1
                   ? "border-q-border/20 text-q-text-dim cursor-not-allowed opacity-40"
                   : "border-q-border/50 text-q-text-sub hover:border-q-yellow/30 hover:text-q-text"
-              }`}
+                }`}
             >
               <FontAwesomeIcon icon={faArrowLeft} className="w-3.5 h-3.5" />
               Précédent
@@ -294,11 +293,10 @@ export default function QuestionnaireClient() {
             <button
               onClick={goNext}
               disabled={isNextDisabled}
-              className={`flex items-center gap-2 px-8 py-3 rounded-full text-sm font-bold transition-all cursor-pointer ${
-                isNextDisabled
+              className={`flex items-center gap-2 px-8 py-3 rounded-full text-sm font-bold transition-all cursor-pointer ${isNextDisabled
                   ? "bg-q-border/30 text-q-text-dim cursor-not-allowed"
                   : "bg-secondary text-neutral hover:brightness-110"
-              }`}
+                }`}
             >
               {step === TOTAL_STEPS ? "Voir mes recommandations" : "Suivant"}
               <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5" />

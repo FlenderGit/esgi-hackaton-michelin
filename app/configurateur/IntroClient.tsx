@@ -69,8 +69,8 @@ export default function IntroClient() {
                   <span className="text-secondary">idéal.</span>
                 </h1>
                 <p className="mt-6 text-q-text-sub text-lg leading-relaxed max-w-lg">
-                  Réponds à quelques questions sur ta pratique du vélo — profil,
-                  terrain, priorités — et notre algorithme te recommande les
+                  Réponds à quelques questions sur ta pratique du vélo  profil,
+                  terrain, priorités  et notre algorithme te recommande les
                   pneus Michelin les mieux adaptés.
                 </p>
               </motion.div>

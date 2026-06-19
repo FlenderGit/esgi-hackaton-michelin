@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import type { Profile } from "@/app/questionnaire/data";
 
@@ -9,83 +10,100 @@ interface QuizResultProps {
   onRestart: () => void;
 }
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const fade = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
+};
+
 export default function QuizResult({ profile, onRestart }: QuizResultProps) {
+  const accent = profile.accentColor;
+
   return (
     <div className="min-h-[calc(100vh-72px)] flex items-center justify-center px-6 py-16">
-      <div className="w-full max-w-xl">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {/* Profile card — fond sombre fixe pour que le texte reste lisible */}
-          <div
-            className="rounded-3xl border-2 overflow-hidden"
-            style={{ borderColor: profile.accentColor + "50", backgroundColor: profile.bgColor }}
-          >
-            <div
-              className="h-2 w-full"
-              style={{ backgroundColor: profile.accentColor }}
+      <motion.div
+        variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+        initial="hidden"
+        animate="show"
+        className="grid w-full max-w-5xl items-center gap-10 md:grid-cols-2 md:gap-16"
+      >
+        {/* ── Texte ───────────────────────────────────────────────── */}
+        <div className="order-2 md:order-1">
+          <motion.div variants={fade} className="flex items-center gap-3">
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: accent }}
             />
+            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-q-text-muted">
+              Ta cyclo-personnalité
+            </span>
+          </motion.div>
 
-            <div className="p-8 md:p-10 space-y-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p
-                    className="text-xs font-bold uppercase tracking-[0.3em] mb-2"
-                    style={{ color: profile.accentColor }}
-                  >
-                    Ton profil
-                  </p>
-                  <h1
-                    className="text-4xl md:text-5xl font-black"
-                    style={{ color: profile.accentColor }}
-                  >
-                    {profile.name}
-                  </h1>
-                  <p className="mt-1 text-sm font-semibold text-white/50">
-                    {profile.tagline}
-                  </p>
-                </div>
-                <motion.span
-                  className="text-6xl"
-                  initial={{ rotate: -20, scale: 0 }}
-                  animate={{ rotate: 0, scale: 1 }}
-                  transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-                >
-                  {profile.emoji}
-                </motion.span>
-              </div>
+          <motion.h1
+            variants={fade}
+            className="mt-6 text-4xl md:text-5xl font-black tracking-tight text-q-text"
+          >
+            {profile.name}
+          </motion.h1>
 
-              <p className="text-white/70 leading-relaxed text-base">
-                {profile.description}
-              </p>
+          <motion.p
+            variants={fade}
+            className="mt-2 text-base font-medium"
+            style={{ color: accent }}
+          >
+            {profile.tagline}
+          </motion.p>
 
-              <div className="border-t border-white/10" />
+          <motion.p
+            variants={fade}
+            className="mt-6 text-base leading-relaxed text-q-text-sub"
+          >
+            {profile.description}
+          </motion.p>
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/configurateur"
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-neutral transition-all hover:brightness-110"
-                  style={{ backgroundColor: profile.accentColor }}
-                >
-                  Trouver mon pneu →
-                </Link>
-                <button
-                  onClick={onRestart}
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white/60 border border-white/20 hover:text-white hover:border-white/40 transition-all cursor-pointer"
-                >
-                  ↻ Recommencer
-                </button>
-              </div>
-            </div>
-          </div>
+          <motion.div
+            variants={fade}
+            className="mt-8 h-px w-full bg-q-border/50"
+          />
 
-          <p className="text-center text-xs text-q-text-dim mt-6">
-            5 profils possibles — et toi, t'es lequel ?
-          </p>
+          <motion.div
+            variants={fade}
+            className="mt-8 flex flex-col sm:flex-row gap-3"
+          >
+            <Link
+              href="/configurateur"
+              className="group flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-q-yellow px-6 py-3.5 text-sm font-bold text-q-bg transition-all hover:brightness-105"
+            >
+              Trouver mon pneu
+              <span className="transition-transform group-hover:translate-x-0.5">
+                →
+              </span>
+            </Link>
+            <button
+              onClick={onRestart}
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-q-border px-6 py-3.5 text-sm font-bold text-q-text-muted transition-all hover:border-q-text-muted hover:text-q-text cursor-pointer"
+            >
+              Refaire le test
+            </button>
+          </motion.div>
+        </div>
+
+        {/* ── Bibendum ────────────────────────────────────────────── */}
+        <motion.div
+          variants={fade}
+          className="order-1 md:order-2 relative flex justify-center"
+        >
+          <Image
+            src="/images/bibendum-hello.png"
+            alt="Bibendum Michelin"
+            width={420}
+            height={400}
+            priority
+            className="relative w-64 md:w-80 h-auto drop-shadow-2xl"
+          />
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 }

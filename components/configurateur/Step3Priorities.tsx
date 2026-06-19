@@ -6,38 +6,38 @@ const CRITERIA: {
   desc: string;
   emoji: string;
 }[] = [
-  {
-    id: "adherence",
-    label: "Adhérence",
-    desc: "Grip virages & freinage",
-    emoji: "🎯",
-  },
-  {
-    id: "anti_crevaison",
-    label: "Anti-crevaison",
-    desc: "Résistance aux perforations",
-    emoji: "🛡️",
-  },
-  {
-    id: "vitesse",
-    label: "Vitesse / rendement",
-    desc: "Moins de résistance au roulement",
-    emoji: "⚡",
-  },
-  {
-    id: "confort",
-    label: "Confort",
-    desc: "Absorption des chocs",
-    emoji: "🍃",
-  },
-  {
-    id: "longevite",
-    label: "Longévité",
-    desc: "Durée de vie de la gomme",
-    emoji: "🔄",
-  },
-  { id: "poids", label: "Poids", desc: "Légèreté pour relancer", emoji: "🪶" },
-];
+    {
+      id: "adherence",
+      label: "Adhérence",
+      desc: "Grip virages & freinage",
+      emoji: "🎯",
+    },
+    {
+      id: "anti_crevaison",
+      label: "Anti-crevaison",
+      desc: "Résistance aux perforations",
+      emoji: "🛡️",
+    },
+    {
+      id: "vitesse",
+      label: "Vitesse / rendement",
+      desc: "Moins de résistance au roulement",
+      emoji: "⚡",
+    },
+    {
+      id: "confort",
+      label: "Confort",
+      desc: "Absorption des chocs",
+      emoji: "🍃",
+    },
+    {
+      id: "longevite",
+      label: "Longévité",
+      desc: "Durée de vie de la gomme",
+      emoji: "🔄",
+    },
+    { id: "poids", label: "Poids", desc: "Légèreté pour relancer", emoji: "🪶" },
+  ];
 
 interface Step3PrioritiesProps {
   answers: WizardAnswers;
@@ -110,20 +110,18 @@ export default function Step3Priorities({
               onClick={() => !isFull && handleClick(crit.id)}
               disabled={isFull}
               aria-pressed={isSelected}
-              className={`flex items-center gap-4 p-4 rounded-2xl text-left transition-all duration-200 w-full border-2 group ${
-                isSelected
+              className={`flex items-center gap-4 p-4 rounded-2xl text-left transition-all duration-200 w-full border-2 group ${isSelected
                   ? "border-q-yellow bg-q-yellow/8"
                   : isFull
                     ? "border-q-border/30 bg-q-card/30 opacity-35 cursor-not-allowed"
                     : "border-q-border/50 hover:border-q-yellow/30 cursor-pointer"
-              }`}
+                }`}
             >
               <span
-                className={`shrink-0 flex items-center justify-center w-10 h-10 rounded-xl text-lg transition-all ${
-                  isSelected
+                className={`shrink-0 flex items-center justify-center w-10 h-10 rounded-xl text-lg transition-all ${isSelected
                     ? "bg-q-yellow text-q-bg font-black text-sm"
                     : "bg-q-card/60"
-                }`}
+                  }`}
               >
                 {isSelected ? idx + 1 : crit.emoji}
               </span>
@@ -141,7 +139,7 @@ export default function Step3Priorities({
 
       {selected.length === 3 && (
         <p className="text-sm text-q-text-dim">
-          Top 3 sélectionné — retire un critère pour en changer un.
+          Top 3 sélectionné  retire un critère pour en changer un.
         </p>
       )}
     </div>

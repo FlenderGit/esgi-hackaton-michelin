@@ -88,7 +88,7 @@ export default function ChampionsClient() {
               Nos <span className="text-secondary">champions</span>
             </h1>
             <p className="mt-6 text-white/50 text-lg max-w-2xl">
-              Route, VTT, enduro, cross-country — les meilleurs cyclistes du
+              Route, VTT, enduro, cross-country  les meilleurs cyclistes du
               monde choisissent Michelin pour repousser leurs limites.
             </p>
           </motion.div>

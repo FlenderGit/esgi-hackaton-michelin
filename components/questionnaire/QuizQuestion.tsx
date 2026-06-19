@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import type { Question, AnswerKey } from "@/app/questionnaire/data";
@@ -32,17 +31,6 @@ export default function QuizQuestion({
   direction,
 }: QuizQuestionProps) {
   const fillPercent = (questionIndex / totalQuestions) * 100;
-  const hasSelected = useRef(false);
-
-  useEffect(() => {
-    hasSelected.current = false;
-  }, [question.id]);
-
-  function handleSelect(key: AnswerKey) {
-    if (hasSelected.current) return;
-    hasSelected.current = true;
-    onSelect(key);
-  }
 
   const variants = {
     enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
@@ -113,7 +101,7 @@ export default function QuizQuestion({
                 return (
                   <button
                     key={answer.key}
-                    onClick={() => handleSelect(answer.key)}
+                    onClick={() => onSelect(answer.key)}
                     className={`group text-left p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer ${
                       isSelected
                         ? "border-secondary bg-secondary/10 shadow-[0_0_20px_rgba(252,229,0,0.08)]"
